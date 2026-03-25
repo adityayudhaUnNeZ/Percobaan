@@ -11,13 +11,19 @@
     "dev": "concurrently -k \"npm:watch:css\" \"nodemon server.js\""
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^4.22.1",
+    "mysql2": "^3.20.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
     "concurrently": "^9.0.1",
-    "nodemon": "^3.1.4",
+    "nodemon": "^3.1.14",
     "postcss": "^8.4.41",
     "tailwindcss": "^3.4.10"
-  }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
