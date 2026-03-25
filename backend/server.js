@@ -6,7 +6,7 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "../frontend")));
 
 const ICECAST_STATS_URL =
   process.env.ICECAST_STATS_URL || "http://172.16.10.187:8000/status-json.xsl";
