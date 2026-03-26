@@ -1,0 +1,61 @@
+.topbar {
+  padding: 18px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: var(--card-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand-logo-only {
+  width: 140px;
+  height: 56px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.brand-title {
+  font-family: var(--font-display);
+  color: var(--brand-pink);
+}
+
+.brand-subtitle {
+  color: var(--brand-teal);
+}
+
+.topbar-socials {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: var(--shadow-soft);
+  text-decoration: none;
+}
+
+.social-icon img {
+  width: 18px;
+  height: 18px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+@media (min-width: 768px) {
+  .nav {
+    display: flex;
+  }
+}
+
+@media (max-width: 767px) {
+  .nav {
+    display: none;
+  }
+}

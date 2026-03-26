@@ -1,0 +1,193 @@
+.icon-img {
+  width: 18px;
+  height: 18px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.icon-img-lg {
+  width: 22px;
+  height: 22px;
+}
+
+.icon-symbol {
+  font-family: "Material Symbols Rounded";
+  font-size: 18px;
+  line-height: 1;
+}
+
+.icon-symbol-lg {
+  font-size: 40px;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--brand-teal);
+}
+
+.section-body {
+  margin-top: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.stat {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.stat-sub {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.controls {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.icon-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  border: none;
+  background: #fce7f3;
+  color: #334155;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
+  cursor: pointer;
+}
+
+.play-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  border: none;
+  background: #334155;
+  color: #ffffff;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+
+.progress {
+  margin-top: 16px;
+}
+
+.progress-track {
+  height: 6px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 40%;
+  background: #64748b;
+  border-radius: 999px;
+}
+
+.hint {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.section-label.live-on {
+  color: #ec4899;
+  animation: livePulse 1.6s ease-in-out infinite;
+}
+
+.radio-panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  background: radial-gradient(120% 120% at 15% 10%, rgba(255, 255, 255, 0.95), rgba(236, 234, 255, 0.7)),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.65));
+  box-shadow: 0 18px 40px rgba(76, 29, 149, 0.08);
+  padding: 22px 22px 26px;
+}
+
+.radio-panel > * {
+  position: relative;
+  z-index: 2;
+}
+
+.radio-panel .section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.18), rgba(20, 184, 166, 0.45));
+  color: #0f766e;
+  letter-spacing: 0.08em;
+}
+
+.radio-panel .section-body {
+  border-top: none;
+  padding-top: 8px;
+}
+
+.radio-panel .stat {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.radio-panel .stat-sub {
+  font-size: 14px;
+  color: #0f766e;
+}
+
+.radio-panel .controls {
+  margin-top: 22px;
+  gap: 18px;
+}
+
+.radio-panel .icon-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 20px;
+  background: rgba(20, 184, 166, 0.15);
+  color: #0f766e;
+  box-shadow: 0 10px 20px rgba(20, 184, 166, 0.2);
+}
+
+.radio-panel .play-btn {
+  width: 74px;
+  height: 74px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%, #f9a8d4, #ec4899 60%);
+  color: #ffffff;
+  box-shadow: 0 16px 30px rgba(236, 72, 153, 0.35);
+}
+
+.radio-panel .progress-track {
+  background: rgba(15, 23, 42, 0.08);
+}
+
+.radio-panel .progress-bar {
+  background: linear-gradient(90deg, #14b8a6, #ec4899);
+}
+
+.radio-panel .hint {
+  color: #9f1239;
+}
+
+@keyframes livePulse {
+  0%, 100% {
+    text-shadow: 0 0 6px rgba(236, 72, 153, 0.35);
+  }
+
+  50% {
+    text-shadow: 0 0 14px rgba(236, 72, 153, 0.75);
+  }
+}
+
+
