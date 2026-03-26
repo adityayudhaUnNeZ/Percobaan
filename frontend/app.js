@@ -18,6 +18,7 @@
   const tabSalam = $("tabSalam");
   const tabRequest = $("tabRequest");
   const formMain = $("formMain");
+  const formTitle = $("formTitle");
   const fieldName = $("fieldName");
   const fieldSecond = $("fieldSecond");
   const fieldMessage = $("fieldMessage");
@@ -42,6 +43,7 @@
     },
   };
   let isPlaying = false;
+  let activeTab = "salam";
   let fakeProgressTimer = null;
   let liveSource = null;
   let livePollTimer = null;
@@ -266,6 +268,7 @@
 
   function setActiveTab(tab) {
     const isSalam = tab === "salam";
+    activeTab = tab;
     if (formMain) {
       formMain.classList.remove("hidden");
       formMain.classList.add("form-switching");
@@ -292,11 +295,48 @@
     if (fieldName) {
       fieldName.placeholder = "Nama";
     }
+    if (formTitle) {
+      formTitle.textContent = isSalam ? "Titip Salam" : "Request Lagu";
+    }
   }
 
   if (tabSalam) tabSalam.addEventListener("click", () => setActiveTab("salam"));
   if (tabRequest)
     tabRequest.addEventListener("click", () => setActiveTab("request"));
+
+  if (formMain) {
+    formMain.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const name = fieldName?.value?.trim();
+      const second = fieldSecond?.value?.trim();
+      const message = fieldMessage?.value?.trim();
+
+      if (!name || !second || !message) {
+        setHint("Lengkapi semua field dulu ya.");
+        return;
+      }
+
+      const isSalam = activeTab === "salam";
+      const url = isSalam ? "/api/greetings" : "/api/requests";
+      const payload = isSalam
+        ? { name, origin: second, message }
+        : { name, artist: second, song_title: message, message: "" };
+
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error("submit failed");
+        formMain.reset();
+        setHint(isSalam ? "Titip salam terkirim." : "Request lagu terkirim.");
+      } catch (err) {
+        setHint("Gagal mengirim. Coba lagi ya.");
+      }
+    });
+  }
+
 
   setPlayUi(false);
   setMuteUi(false);
@@ -304,3 +344,5 @@
   renderState();
   startLiveListeners();
 })();
+
+
