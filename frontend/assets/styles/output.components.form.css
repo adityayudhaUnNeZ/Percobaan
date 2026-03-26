@@ -3,12 +3,12 @@
   padding: 6px;
   border-radius: 999px;
   background: #fce7f3;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: center;
-  justify-content: center;
+  justify-items: center;
   gap: 8px;
-  width: -moz-fit-content;
-  width: fit-content;
+  width: 100%;
   font-size: 14px;
   font-weight: 600;
   color: #475569;
@@ -25,20 +25,22 @@
 
 .tab-pill {
   border: none;
-  background: transparent;
+  background: #ffe2ef;
   padding: 8px 16px;
   border-radius: 999px;
   cursor: pointer;
-  color: inherit;
-  min-width: 120px;
+  color: #7a3355;
+  width: 100%;
+  min-width: 0;
   text-align: center;
   transition: background-color 220ms ease, color 220ms ease,
       box-shadow 220ms ease, transform 220ms ease;
 }
 
+
 .tab-pill-active {
-  background: var(--pill-active);
-  color: var(--ink);
+  background: var(--brand-pink);
+  color: #ffffff;
   box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
 }
 
@@ -69,3 +71,10 @@
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
 }
+
+
+
+
+
+
+

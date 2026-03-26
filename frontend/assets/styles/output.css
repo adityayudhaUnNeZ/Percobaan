@@ -142,7 +142,7 @@
 body {
   margin: 0;
   font-family: var(--font-body);
-  color: var(--ink);
+  color: #ffffff;
   background: radial-gradient(70% 80% at 15% 10%, var(--bg-1), transparent 55%),
       radial-gradient(80% 90% at 90% 20%, var(--bg-2), transparent 60%),
       linear-gradient(180deg, #f8f1f4, #f7f5ee);
@@ -155,8 +155,7 @@ img, svg, video, canvas {
 
 button, input, textarea, select {
   font: inherit;
-  color: inherit;
-}
+  color: #7a3355;`r`n  width: 100%;`r`n}
 
 .container {
   width: 100%;
@@ -504,6 +503,22 @@ button, input, textarea, select {
   color: #9f1239;
 }
 
+.tab-bar {
+  margin: 0 auto;
+  padding: 6px;
+  border-radius: 999px;
+  background: #fce7f3;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  justify-items: center;
+  gap: 8px;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+}
+
 .form-title {
   margin: 14px 0 4px;
   text-align: center;
@@ -515,20 +530,22 @@ button, input, textarea, select {
 
 .tab-pill {
   border: none;
-  background: transparent;
+  background: #ffe2ef;
   padding: 8px 16px;
   border-radius: 999px;
   cursor: pointer;
-  color: inherit;
-  min-width: 120px;
+  color: #7a3355;
+  width: 100%;
+  min-width: 0;
   text-align: center;
   transition: background-color 220ms ease, color 220ms ease,
       box-shadow 220ms ease, transform 220ms ease;
 }
 
+
 .tab-pill-active {
-  background: var(--pill-active);
-  color: var(--ink);
+  background: var(--brand-pink);
+  color: #ffffff;
   box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
 }
 
@@ -688,6 +705,13 @@ button, input, textarea, select {
   width: -moz-max-content;
   width: max-content;
 }
+
+
+
+
+
+
+
 
 
 
