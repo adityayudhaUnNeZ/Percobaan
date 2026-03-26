@@ -32,7 +32,7 @@
     scheduleText: "Rabu, 4 Februari 2026 10.00-11.00 WIB",
     listenersText: "",
     topicText: "Topics: UHC",
-    streamUrl: "http://172.16.10.227:8000/radio",
+    streamUrl: "http://172.16.10.94:8000/radio",
     posterUrl: "assets/images/poster.jpeg",
     links: {
       youtube: "https://www.youtube.com/@dinkessemarangkota",
@@ -214,7 +214,7 @@
         updateListenerUi(data.count, data.updatedAt);
       }
     } catch {
-      // ignore: fallback keeps last known value
+      // fallback: show zero when API fails\n      updateListenerUi(0, null);
     }
   }
 

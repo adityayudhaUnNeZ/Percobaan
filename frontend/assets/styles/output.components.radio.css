@@ -100,8 +100,17 @@
 }
 
 .section-label.live-on {
-  color: #ec4899;
-  animation: livePulse 1.6s ease-in-out infinite;
+  color: #be123c;
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(236, 72, 153, 0.55);
+  animation: livePulse 1.2s ease-in-out infinite;
+}
+
+.radio-panel .section-label.live-on {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.25), rgba(236, 72, 153, 0.6));
+  color: #9f1239;
+  border: 1px solid rgba(236, 72, 153, 0.35);
+  box-shadow: 0 10px 22px rgba(236, 72, 153, 0.35);
 }
 
 .radio-panel {
@@ -182,12 +191,15 @@
 
 @keyframes livePulse {
   0%, 100% {
-    text-shadow: 0 0 6px rgba(236, 72, 153, 0.35);
+    transform: scale(1);
+    text-shadow: 0 0 8px rgba(236, 72, 153, 0.45);
+    box-shadow: 0 0 0 rgba(236, 72, 153, 0);
   }
 
   50% {
-    text-shadow: 0 0 14px rgba(236, 72, 153, 0.75);
+    transform: scale(1.08);
+    text-shadow: 0 0 18px rgba(236, 72, 153, 0.95);
+    box-shadow: 0 0 18px rgba(236, 72, 153, 0.5);
   }
 }
-
 
