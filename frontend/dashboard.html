@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard - Minkes Radio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 p-6">
+    <h1 class="text-3xl font-bold mb-6">🎛️ Admin Dashboard</h1>
+
+    <!-- Upload Poster -->
+    <div class="bg-white p-4 rounded-xl shadow mb-6">
+      <h2 class="text-xl font-semibold mb-2">Upload Poster</h2>
+      <input
+        type="text"
+        id="title"
+        placeholder="Judul Poster"
+        class="border p-2 w-full mb-2"
+      />
+      <input type="file" id="image" class="mb-2" />
+      <button
+        onclick="uploadPoster()"
+        class="bg-blue-500 text-white px-4 py-2 rounded"
+      >
+        Upload
+      </button>
+    </div>
+
+    <!-- Poster -->
+    <div class="bg-white p-4 rounded-xl shadow mb-6">
+      <h2 class="text-xl font-semibold mb-2">Poster Terbaru</h2>
+      <div id="posterList"></div>
+    </div>
+
+    <!-- Greetings -->
+    <div class="bg-white p-4 rounded-xl shadow mb-6">
+      <h2 class="text-xl font-semibold mb-2">Titip Salam</h2>
+      <ul id="greetingsList"></ul>
+    </div>
+
+    <!-- Requests -->
+    <div class="bg-white p-4 rounded-xl shadow">
+      <h2 class="text-xl font-semibold mb-2">Request Lagu</h2>
+      <ul id="requestList"></ul>
+    </div>
+
+    <script>
+      const API = "http://localhost:5000";
+
+      // LOAD DATA
+      async function loadData() {
+        const greetings = await fetch(API + "/api/greetings").then((r) =>
+          r.json()
+        );
+        const requests = await fetch(API + "/api/requests").then((r) =>
+          r.json()
+        );
+        const posters = await fetch(API + "/api/posters").then((r) => r.json());
+
+        document.getElementById("greetingsList").innerHTML = greetings
+          .map((g) => `<li>${g.name}: ${g.message}</li>`)
+          .join("");
+
+        document.getElementById("requestList").innerHTML = requests
+          .map((r) => `<li>${r.name} - ${r.song_title}</li>`)
+          .join("");
+
+        document.getElementById("posterList").innerHTML = posters
+          .map(
+            (p) => `
+      <div class="mb-2">
+        <p>${p.title}</p>
+        <img src="${API + p.image_url}" class="w-48">
+      </div>
+    `
+          )
+          .join("");
+      }
+
+      // UPLOAD POSTER
+      async function uploadPoster() {
+        const formData = new FormData();
+        formData.append("title", document.getElementById("title").value);
+        formData.append("image", document.getElementById("image").files[0]);
+
+        await fetch(API + "/api/posters", {
+          method: "POST",
+          body: formData,
+        });
+
+        alert("Upload berhasil!");
+        loadData();
+      }
+
+      // INIT
+      loadData();
+    </script>
+  </body>
+</html>

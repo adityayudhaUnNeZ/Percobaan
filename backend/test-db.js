@@ -5,7 +5,7 @@ async function test() {
     const [rows] = await db.execute("SELECT 1");
     console.log("Database connected!");
   } catch (err) {
-    console.error("Database error:", err);
+    console.error("Database error:", err.message);
   }
 }
 

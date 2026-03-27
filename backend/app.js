@@ -11,6 +11,8 @@ app.use(express.json());
 
 app.use("/api/greetings", require("./routes/greetingRoutes"));
 app.use("/api/requests", require("./routes/requestRoutes"));
+app.use("/uploads", express.static("uploads"));
+app.use("/api/posters", require("./routes/posterRoutes"));
 
 app.use(express.static(path.join(__dirname, "../frontend")));
 

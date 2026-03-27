@@ -1,4 +1,5 @@
 (function () {
+  const API = "http://localhost:5000";
   const $ = (id) => document.getElementById(id);
 
   const audio = $("audio");
@@ -22,6 +23,7 @@
   const fieldSecond = $("fieldSecond");
   const fieldMessage = $("fieldMessage");
   const hint = $("hint");
+  const formStatus = $("formStatus");
 
   const radioPanel = $("radioPanel");
   const state = {
@@ -44,10 +46,66 @@
   let fakeProgressTimer = null;
   let liveSource = null;
   let livePollTimer = null;
+  let activeTab = "salam";
+  let formStatusTimer = null;
+  let formStatusHideTimer = null;
 
   function setHint(text) {
     if (!hint) return;
     hint.textContent = text;
+  }
+
+  function setFormStatus(text, type = "info") {
+    if (!formStatus) return;
+    if (formStatusTimer) {
+      window.clearTimeout(formStatusTimer);
+      formStatusTimer = null;
+    }
+    if (formStatusHideTimer) {
+      window.clearTimeout(formStatusHideTimer);
+      formStatusHideTimer = null;
+    }
+
+    formStatus.style.transition = "opacity 240ms ease, transform 240ms ease";
+
+    if (!text) {
+      formStatus.style.opacity = "0";
+      formStatus.style.transform = "translateY(-4px)";
+      formStatusHideTimer = window.setTimeout(() => {
+        formStatus.textContent = "";
+        formStatus.style.display = "none";
+      }, 240);
+      return;
+    }
+
+    const styles = {
+      success: { bg: "#dcfce7", color: "#166534", border: "#86efac" },
+      error: { bg: "#fee2e2", color: "#991b1b", border: "#fca5a5" },
+      info: { bg: "#e0f2fe", color: "#075985", border: "#7dd3fc" },
+    };
+    const picked = styles[type] || styles.info;
+
+    formStatus.textContent = text;
+    formStatus.style.display = "inline-block";
+    formStatus.style.marginTop = "8px";
+    formStatus.style.padding = "6px 10px";
+    formStatus.style.borderRadius = "999px";
+    formStatus.style.fontSize = "12px";
+    formStatus.style.fontWeight = "600";
+    formStatus.style.backgroundColor = picked.bg;
+    formStatus.style.color = picked.color;
+    formStatus.style.border = `1px solid ${picked.border}`;
+    formStatus.style.opacity = "0";
+    formStatus.style.transform = "translateY(-4px)";
+
+    window.requestAnimationFrame(() => {
+      formStatus.style.opacity = "1";
+      formStatus.style.transform = "translateY(0)";
+    });
+
+    formStatusTimer = window.setTimeout(() => {
+      setFormStatus("");
+    }, 5000);
   }
 
   function setPlayUi(playing) {
@@ -258,13 +316,16 @@
   }
 
   function setActiveTab(tab) {
-    const isSalam = tab === "salam";
+    activeTab = tab === "request" ? "request" : "salam";
+    const isSalam = activeTab === "salam";
     if (formMain) {
-      formMain.classList.remove("hidden");
-      formMain.classList.add("form-switching");
-      window.setTimeout(() => {
-        formMain.classList.remove("form-switching");
-      }, 220);
+      formMain.style.transition = "opacity 220ms ease, transform 220ms ease";
+      formMain.style.opacity = "0.6";
+      formMain.style.transform = "translateY(4px)";
+      window.requestAnimationFrame(() => {
+        formMain.style.opacity = "1";
+        formMain.style.transform = "translateY(0)";
+      });
     }
 
     if (tabSalam) {
@@ -285,15 +346,59 @@
     if (fieldName) {
       fieldName.placeholder = "Nama";
     }
+    setFormStatus("");
   }
 
   if (tabSalam) tabSalam.addEventListener("click", () => setActiveTab("salam"));
   if (tabRequest)
     tabRequest.addEventListener("click", () => setActiveTab("request"));
 
+  function setupMainForm() {
+    if (!formMain || !fieldName || !fieldSecond || !fieldMessage) return;
+
+    formMain.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const name = fieldName.value.trim();
+      const second = fieldSecond.value.trim();
+      const message = fieldMessage.value.trim();
+
+      if (!name || !message) {
+        setFormStatus("Nama dan isi form wajib diisi.", "error");
+        return;
+      }
+
+      const endpoint =
+        activeTab === "salam" ? API + "/api/greetings" : API + "/api/requests";
+      const payload =
+        activeTab === "salam"
+          ? { name, origin: second, message }
+          : { name, artist: second, song_title: message, message: "" };
+
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error("submit failed");
+
+        formMain.reset();
+        if (activeTab === "salam") {
+          setFormStatus("Titip salam berhasil dikirim.", "success");
+        } else {
+          setFormStatus("Request lagu berhasil dikirim.", "success");
+        }
+      } catch {
+        setFormStatus("Gagal kirim formulir. Coba lagi.", "error");
+      }
+    });
+  }
+
   setPlayUi(false);
   setMuteUi(false);
   setActiveTab("salam");
   renderState();
   startLiveListeners();
+  setupMainForm();
 })();
