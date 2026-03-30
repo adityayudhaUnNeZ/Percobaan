@@ -2,6 +2,10 @@ const { createPoster, getPosters } = require("../models/posterModel");
 
 exports.uploadPoster = async (req, res) => {
   try {
+    if (!req.file) {
+      return res.status(400).json({ error: "Image file is required" });
+    }
+
     const image_url = `/uploads/${req.file.filename}`;
     const { title } = req.body;
 
@@ -14,6 +18,10 @@ exports.uploadPoster = async (req, res) => {
 };
 
 exports.listPosters = async (req, res) => {
-  const data = await getPosters();
-  res.json(data);
+  try {
+    const data = await getPosters();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };

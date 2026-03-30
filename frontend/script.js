@@ -34,7 +34,7 @@
     scheduleText: "Rabu, 4 Februari 2026 10.00-11.00 WIB",
     listenersText: "",
     topicText: "Topics: UHC",
-    streamUrl: "http://172.16.10.94:8000/radio",
+    streamUrl: "http://172.16.10.201:8000/radio",
     posterUrl: "assets/images/poster.jpeg",
     links: {
       youtube: "https://www.youtube.com/@dinkessemarangkota",
@@ -49,6 +49,7 @@
   let activeTab = "salam";
   let formStatusTimer = null;
   let formStatusHideTimer = null;
+  let posterPollTimer = null;
 
   function setHint(text) {
     if (!hint) return;
@@ -140,6 +141,48 @@
     if (fakeProgressTimer) window.clearInterval(fakeProgressTimer);
     fakeProgressTimer = null;
     if (seekBar) seekBar.style.width = "40%";
+  }
+
+  function resolvePosterUrl(imageUrl, stamp) {
+    if (!imageUrl) return "";
+    const absolute = imageUrl.startsWith("http")
+      ? imageUrl
+      : `${API}${imageUrl}`;
+    return stamp ? `${absolute}?v=${encodeURIComponent(stamp)}` : absolute;
+  }
+
+  async function syncLatestPoster() {
+    try {
+      const res = await fetch(`${API}/api/posters`, { cache: "no-store" });
+      if (!res.ok) throw new Error("poster fetch failed");
+      const posters = await res.json();
+      if (!Array.isArray(posters) || posters.length === 0) return;
+
+      const latest = posters[0];
+      const nextPosterUrl = resolvePosterUrl(
+        latest.image_url,
+        latest.updated_at || latest.created_at || latest.id || Date.now()
+      );
+      if (!nextPosterUrl || nextPosterUrl === state.posterUrl) return;
+
+      state.posterUrl = nextPosterUrl;
+      if (poster) {
+        poster.src = nextPosterUrl;
+      }
+    } catch {
+      // keep current poster when API is unavailable
+    }
+  }
+
+  function stopPosterPolling() {
+    if (posterPollTimer) window.clearInterval(posterPollTimer);
+    posterPollTimer = null;
+  }
+
+  function startPosterPolling() {
+    stopPosterPolling();
+    syncLatestPoster();
+    posterPollTimer = window.setInterval(syncLatestPoster, 8000);
   }
 
   function renderState() {
@@ -272,7 +315,7 @@
         updateListenerUi(data.count, data.updatedAt);
       }
     } catch {
-      // fallback: show zero when API fails\n      updateListenerUi(0, null);
+      //fallback: show zero when API fails\n      updateListenerUi(0, null);
     }
   }
 
@@ -400,5 +443,6 @@
   setActiveTab("salam");
   renderState();
   startLiveListeners();
+  startPosterPolling();
   setupMainForm();
 })();

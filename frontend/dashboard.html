@@ -6,9 +6,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-gray-100 p-6">
-    <h1 class="text-3xl font-bold mb-6">🎛️ Admin Dashboard</h1>
+    <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
 
-    <!-- Upload Poster -->
     <div class="bg-white p-4 rounded-xl shadow mb-6">
       <h2 class="text-xl font-semibold mb-2">Upload Poster</h2>
       <input
@@ -26,74 +25,124 @@
       </button>
     </div>
 
-    <!-- Poster -->
     <div class="bg-white p-4 rounded-xl shadow mb-6">
       <h2 class="text-xl font-semibold mb-2">Poster Terbaru</h2>
       <div id="posterList"></div>
     </div>
 
-    <!-- Greetings -->
     <div class="bg-white p-4 rounded-xl shadow mb-6">
       <h2 class="text-xl font-semibold mb-2">Titip Salam</h2>
       <ul id="greetingsList"></ul>
     </div>
 
-    <!-- Requests -->
     <div class="bg-white p-4 rounded-xl shadow">
       <h2 class="text-xl font-semibold mb-2">Request Lagu</h2>
       <ul id="requestList"></ul>
     </div>
 
     <script>
-      const API = "http://localhost:5000";
+      const API =
+        window.location.origin && window.location.origin.startsWith("http")
+          ? window.location.origin
+          : "http://localhost:5000";
 
-      // LOAD DATA
-      async function loadData() {
-        const greetings = await fetch(API + "/api/greetings").then((r) =>
-          r.json()
-        );
-        const requests = await fetch(API + "/api/requests").then((r) =>
-          r.json()
-        );
-        const posters = await fetch(API + "/api/posters").then((r) => r.json());
-
-        document.getElementById("greetingsList").innerHTML = greetings
-          .map((g) => `<li>${g.name}: ${g.message}</li>`)
-          .join("");
-
-        document.getElementById("requestList").innerHTML = requests
-          .map((r) => `<li>${r.name} - ${r.song_title}</li>`)
-          .join("");
-
-        document.getElementById("posterList").innerHTML = posters
-          .map(
-            (p) => `
-      <div class="mb-2">
-        <p>${p.title}</p>
-        <img src="${API + p.image_url}" class="w-48">
-      </div>
-    `
-          )
-          .join("");
+      function resetNode(node) {
+        while (node.firstChild) {
+          node.removeChild(node.firstChild);
+        }
       }
 
-      // UPLOAD POSTER
+      function appendListItem(container, text) {
+        const item = document.createElement("li");
+        item.textContent = text;
+        container.appendChild(item);
+      }
+
+      function appendPoster(container, poster) {
+        const card = document.createElement("div");
+        card.className = "mb-2";
+
+        const title = document.createElement("p");
+        title.textContent = poster.title || "(Tanpa judul)";
+
+        const image = document.createElement("img");
+        image.className = "w-48";
+        image.alt = poster.title || "Poster";
+        image.src = `${API}${poster.image_url}`;
+
+        card.appendChild(title);
+        card.appendChild(image);
+        container.appendChild(card);
+      }
+      function toFriendlyAdminError(rawMessage) {
+        const message = typeof rawMessage === "string" ? rawMessage.trim() : "";
+        if (!message) return "Terjadi kendala. Coba lagi.";
+
+        if (message === "Image file is required") {
+          return "File gambar wajib dipilih sebelum upload.";
+        }
+
+        return message;
+      }
+      async function loadData() {
+        const [greetings, requests, posters] = await Promise.all([
+          fetch(API + "/api/greetings").then((r) => r.json()),
+          fetch(API + "/api/requests").then((r) => r.json()),
+          fetch(API + "/api/posters").then((r) => r.json()),
+        ]);
+
+        const greetingsList = document.getElementById("greetingsList");
+        const requestList = document.getElementById("requestList");
+        const posterList = document.getElementById("posterList");
+
+        resetNode(greetingsList);
+        resetNode(requestList);
+        resetNode(posterList);
+
+        greetings.forEach((g) => appendListItem(greetingsList, `${g.name}: ${g.message}`));
+        requests.forEach((r) => appendListItem(requestList, `${r.name} - ${r.song_title}`));
+        posters.forEach((p) => appendPoster(posterList, p));
+      }
+
       async function uploadPoster() {
+        const imageInput = document.getElementById("image");
+        const selectedFile = imageInput.files[0];
+
+        if (!selectedFile) {
+          alert("Silakan pilih file gambar terlebih dahulu.");
+          return;
+        }
+
         const formData = new FormData();
         formData.append("title", document.getElementById("title").value);
-        formData.append("image", document.getElementById("image").files[0]);
+        formData.append("image", selectedFile);
 
-        await fetch(API + "/api/posters", {
+        const res = await fetch(API + "/api/posters", {
           method: "POST",
           body: formData,
         });
+
+        if (!res.ok) {
+          let message = "Upload gagal.";
+          try {
+            const data = await res.json();
+            if (typeof data?.error === "string" && data.error.trim()) {
+              message = toFriendlyAdminError(data.error);
+            }
+          } catch {
+            // keep default message when response body is not JSON
+          }
+          alert(message);
+          return;
+        }
 
         alert("Upload berhasil!");
         loadData();
       }
 
-      // INIT
       loadData();
     </script>
   </body>
 </html>
+
+
