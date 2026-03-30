@@ -44,7 +44,7 @@
       const API =
         window.location.origin && window.location.origin.startsWith("http")
           ? window.location.origin
-          : "http://localhost:5000";
+          : "http://172.16.10.201:5000";
 
       function resetNode(node) {
         while (node.firstChild) {
@@ -99,8 +99,12 @@
         resetNode(requestList);
         resetNode(posterList);
 
-        greetings.forEach((g) => appendListItem(greetingsList, `${g.name}: ${g.message}`));
-        requests.forEach((r) => appendListItem(requestList, `${r.name} - ${r.song_title}`));
+        greetings.forEach((g) =>
+          appendListItem(greetingsList, `${g.name}: ${g.message}`)
+        );
+        requests.forEach((r) =>
+          appendListItem(requestList, `${r.name} - ${r.song_title}`)
+        );
         posters.forEach((p) => appendPoster(posterList, p));
       }
 
@@ -144,5 +148,3 @@
     </script>
   </body>
 </html>
-
-

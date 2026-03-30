@@ -1,5 +1,8 @@
 (function () {
-  const API = "http://localhost:5000";
+  const API =
+    window.location.origin && window.location.origin.startsWith("http")
+      ? window.location.origin
+      : "http://172.16.10.201:5000";
   const $ = (id) => document.getElementById(id);
 
   const audio = $("audio");
@@ -308,7 +311,7 @@
 
   async function fetchListenerOnce() {
     try {
-      const res = await fetch("/api/listeners", { cache: "no-store" });
+      const res = await fetch(`${API}/api/listeners`, { cache: "no-store" });
       if (!res.ok) throw new Error("listener fetch failed");
       const data = await res.json();
       if (typeof data?.count === "number") {
@@ -338,7 +341,7 @@
   function startLiveListeners() {
     if ("EventSource" in window) {
       stopLiveSource();
-      liveSource = new EventSource("/api/live-listeners");
+      liveSource = new EventSource(`${API}/api/live-listeners`);
       liveSource.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
@@ -446,3 +449,4 @@
   startPosterPolling();
   setupMainForm();
 })();
+
