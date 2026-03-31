@@ -17,7 +17,7 @@ app.use("/api/posters", require("./routes/posterRoutes"));
 app.use(express.static(path.join(__dirname, "../frontend")));
 
 const ICECAST_STATS_URL =
-  process.env.ICECAST_STATS_URL || "http://172.16.10.201:8000/status-json.xsl";
+  process.env.ICECAST_STATS_URL || "http://172.16.10.107:8000/status-json.xsl";
 const ICECAST_MOUNT = process.env.ICECAST_MOUNT || "/radio";
 const ICECAST_USER = process.env.ICECAST_USER || "";
 const ICECAST_PASSWORD = process.env.ICECAST_PASSWORD || "";
