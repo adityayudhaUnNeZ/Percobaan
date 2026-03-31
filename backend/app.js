@@ -24,6 +24,7 @@ const ICECAST_PASSWORD = process.env.ICECAST_PASSWORD || "";
 let liveListenerCount = 0;
 const liveClients = new Set();
 let lastUpdatedAt = null;
+let lastRefreshError = null;
 
 function broadcastListeners() {
   const payload = JSON.stringify({
@@ -39,10 +40,27 @@ function parseIcecastListeners(data, mount) {
   const source = data?.icestats?.source;
   if (!source) return null;
   const sources = Array.isArray(source) ? source : [source];
-  const matched = sources.find((item) => item?.listenurl?.includes(mount));
+  const normalizedMount = String(mount || "").trim();
+  const matched = sources.find((item) => {
+    const listenUrl = String(item?.listenurl || "");
+    const itemMount = String(item?.mount || "");
+    return (
+      (normalizedMount && listenUrl.includes(normalizedMount)) ||
+      (normalizedMount && itemMount === normalizedMount)
+    );
+  });
   const target = matched || sources[0];
-  const listeners = Number(target?.listeners);
-  return Number.isFinite(listeners) ? listeners : null;
+  const listenerCandidates = [
+    target?.listeners,
+    target?.listener,
+    target?.connected,
+    target?.clients,
+  ];
+  for (const value of listenerCandidates) {
+    const parsed = Number(value);
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  return null;
 }
 
 function fetchIcecastStats(url) {
@@ -98,10 +116,17 @@ async function refreshListenerCount() {
     if (typeof listeners === "number") {
       liveListenerCount = listeners;
       lastUpdatedAt = new Date().toISOString();
+      lastRefreshError = null;
       broadcastListeners();
+      return;
     }
-  } catch {
+    lastRefreshError = "Listener count was not found in Icecast stats payload";
+  } catch (err) {
     // keep last known value if request fails
+    lastRefreshError =
+      err && err.message
+        ? `Failed to refresh listener count from Icecast: ${err.message}`
+        : "Failed to refresh listener count from Icecast";
   }
 }
 
@@ -112,6 +137,7 @@ app.get("/api/listeners", (_req, res) => {
   res.json({
     count: liveListenerCount,
     updatedAt: lastUpdatedAt || new Date().toISOString(),
+    error: lastRefreshError,
   });
 });
 

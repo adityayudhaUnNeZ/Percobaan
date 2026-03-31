@@ -338,6 +338,9 @@
   }
 
   function startLiveListeners() {
+    // Keep polling active as a resilient fallback even when SSE is available.
+    startLivePolling();
+
     if ("EventSource" in window) {
       stopLiveSource();
       liveSource = new EventSource(`${API}/api/live-listeners`);
@@ -353,10 +356,7 @@
       };
       liveSource.onerror = () => {
         stopLiveSource();
-        startLivePolling();
       };
-    } else {
-      startLivePolling();
     }
   }
 
