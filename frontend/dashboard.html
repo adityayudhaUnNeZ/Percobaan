@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard - Minkes Radio</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="bg-gray-100 p-6">
-    <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
+  <body class="bg-slate-100 p-4 md:p-6">
+    <h1 class="text-3xl font-bold mb-6 text-slate-900">
+      Dashboard Admin Minkes Radio
+    </h1>
 
-    <div class="bg-white p-4 rounded-xl shadow mb-6">
+    <div class="bg-white p-4 rounded-xl shadow mb-6 border border-slate-200">
       <h2 class="text-xl font-semibold mb-2">Upload Poster</h2>
       <input
         type="text"
@@ -25,26 +28,48 @@
       </button>
     </div>
 
-    <div class="bg-white p-4 rounded-xl shadow mb-6">
+    <div class="bg-white p-4 rounded-xl shadow mb-6 border border-slate-200">
       <h2 class="text-xl font-semibold mb-2">Poster Terbaru</h2>
       <div id="posterList"></div>
     </div>
 
-    <div class="bg-white p-4 rounded-xl shadow mb-6">
-      <h2 class="text-xl font-semibold mb-2">Titip Salam</h2>
-      <ul id="greetingsList"></ul>
+    <div class="bg-white p-4 rounded-xl shadow mb-6 border border-slate-200">
+      <div class="flex items-center justify-between gap-3 mb-2">
+        <h2 class="text-xl font-semibold">Penerimaan Titip Salam</h2>
+        <span
+          id="greetingsCount"
+          class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700"
+          >0 masuk</span
+        >
+      </div>
+      <p class="text-sm text-slate-600 mb-3">
+        Daftar pesan salam terbaru dari pendengar. Periksa nama pengirim, asal,
+        dan isi salam sebelum dibacakan.
+      </p>
+      <div id="greetingsList" class="space-y-3"></div>
     </div>
 
-    <div class="bg-white p-4 rounded-xl shadow">
-      <h2 class="text-xl font-semibold mb-2">Request Lagu</h2>
-      <ul id="requestList"></ul>
+    <div class="bg-white p-4 rounded-xl shadow border border-slate-200">
+      <div class="flex items-center justify-between gap-3 mb-2">
+        <h2 class="text-xl font-semibold">Penerimaan Request Lagu</h2>
+        <span
+          id="requestsCount"
+          class="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-100 text-emerald-700"
+          >0 masuk</span
+        >
+      </div>
+      <p class="text-sm text-slate-600 mb-3">
+        Prioritaskan request dengan data lengkap: pengirim, judul lagu, dan
+        penyanyi.
+      </p>
+      <div id="requestList" class="space-y-3"></div>
     </div>
 
     <script>
       const API =
         window.location.origin && window.location.origin.startsWith("http")
           ? window.location.origin
-          : "http://172.16.10.107:8000";
+          : "http://172.17.10.160:8000";
 
       function resetNode(node) {
         while (node.firstChild) {
@@ -52,10 +77,42 @@
         }
       }
 
-      function appendListItem(container, text) {
-        const item = document.createElement("li");
-        item.textContent = text;
-        container.appendChild(item);
+      function formatDateTime(value) {
+        if (!value) return "-";
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "-";
+        return date.toLocaleString("id-ID", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      }
+
+      function buildField(label, value) {
+        const row = document.createElement("p");
+        row.className = "text-sm text-slate-700";
+
+        const key = document.createElement("span");
+        key.className = "font-semibold text-slate-900";
+        key.textContent = `${label}: `;
+
+        const text = document.createElement("span");
+        text.textContent =
+          value && String(value).trim().length > 0 ? String(value) : "-";
+
+        row.appendChild(key);
+        row.appendChild(text);
+        return row;
+      }
+
+      function appendEmptyState(container, text) {
+        const empty = document.createElement("div");
+        empty.className =
+          "rounded-lg border border-dashed border-slate-300 bg-slate-50 p-3 text-sm text-slate-600";
+        empty.textContent = text;
+        container.appendChild(empty);
       }
 
       function appendPoster(container, poster) {
@@ -74,6 +131,43 @@
         card.appendChild(image);
         container.appendChild(card);
       }
+
+      function appendGreetingCard(container, greeting) {
+        const card = document.createElement("article");
+        card.className = "rounded-lg border border-slate-200 bg-slate-50 p-3";
+
+        const title = document.createElement("h3");
+        title.className = "font-semibold text-slate-900 mb-2";
+        title.textContent = greeting?.name || "Tanpa nama";
+
+        card.appendChild(title);
+        card.appendChild(buildField("Asal", greeting?.origin));
+        card.appendChild(buildField("Isi Salam", greeting?.message));
+        card.appendChild(
+          buildField("Waktu Masuk", formatDateTime(greeting?.created_at))
+        );
+
+        container.appendChild(card);
+      }
+
+      function appendRequestCard(container, request) {
+        const card = document.createElement("article");
+        card.className = "rounded-lg border border-slate-200 bg-emerald-50 p-3";
+
+        const title = document.createElement("h3");
+        title.className = "font-semibold text-slate-900 mb-2";
+        title.textContent = request?.song_title || "Judul lagu belum diisi";
+
+        card.appendChild(title);
+        card.appendChild(buildField("Pengirim", request?.name));
+        card.appendChild(buildField("Penyanyi", request?.artist));
+        card.appendChild(
+          buildField("Waktu Masuk", formatDateTime(request?.created_at))
+        );
+
+        container.appendChild(card);
+      }
+
       function toFriendlyAdminError(rawMessage) {
         const message = typeof rawMessage === "string" ? rawMessage.trim() : "";
         if (!message) return "Terjadi kendala. Coba lagi.";
@@ -84,6 +178,7 @@
 
         return message;
       }
+
       async function loadData() {
         const [greetings, requests, posters] = await Promise.all([
           fetch(API + "/api/greetings").then((r) => r.json()),
@@ -94,17 +189,36 @@
         const greetingsList = document.getElementById("greetingsList");
         const requestList = document.getElementById("requestList");
         const posterList = document.getElementById("posterList");
+        const greetingsCount = document.getElementById("greetingsCount");
+        const requestsCount = document.getElementById("requestsCount");
 
         resetNode(greetingsList);
         resetNode(requestList);
         resetNode(posterList);
 
-        greetings.forEach((g) =>
-          appendListItem(greetingsList, `${g.name}: ${g.message}`)
-        );
-        requests.forEach((r) =>
-          appendListItem(requestList, `${r.name} - ${r.song_title}`)
-        );
+        if (greetingsCount)
+          greetingsCount.textContent = `${greetings.length} masuk`;
+        if (requestsCount)
+          requestsCount.textContent = `${requests.length} masuk`;
+
+        if (greetings.length === 0) {
+          appendEmptyState(
+            greetingsList,
+            "Belum ada titip salam masuk saat ini."
+          );
+        } else {
+          greetings.forEach((g) => appendGreetingCard(greetingsList, g));
+        }
+
+        if (requests.length === 0) {
+          appendEmptyState(
+            requestList,
+            "Belum ada request lagu dengan status pending."
+          );
+        } else {
+          requests.forEach((r) => appendRequestCard(requestList, r));
+        }
+
         posters.forEach((p) => appendPoster(posterList, p));
       }
 

@@ -3,13 +3,21 @@
   border-color: rgb(255 255 255 / 0.5);
   background-color: rgb(255 255 255 / 0.7);
   --tw-backdrop-blur: blur(12px);
-  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
+    var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale)
+    var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert)
+    var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
+    var(--tw-backdrop-sepia);
 }
 
 .app-shell {
-  background: radial-gradient(70% 80% at 15% 10%, var(--app-bg-1), transparent 55%),
-      radial-gradient(80% 90% at 90% 20%, var(--app-bg-2), transparent 60%),
-      linear-gradient(180deg, #f8f1f4, #f7f5ee);
+  background: radial-gradient(
+      70% 80% at 15% 10%,
+      var(--app-bg-1),
+      transparent 55%
+    ),
+    radial-gradient(80% 90% at 90% 20%, var(--app-bg-2), transparent 60%),
+    linear-gradient(180deg, #f8f1f4, #f7f5ee);
   color: var(--text-main);
 }
 
@@ -32,12 +40,17 @@
 .card-glow {
   padding: 20px;
   border-radius: 22px;
-  background: linear-gradient(135deg, var(--card-a), #b9f1ff 32%, var(--card-b) 96%);
+  background: linear-gradient(
+    135deg,
+    var(--card-a),
+    #b9f1ff 32%,
+    var(--card-b) 96%
+  );
   box-shadow: var(--shadow);
 }
 
 .footer {
-  margin-top: 24px;
+  margin-top: 60px;
   text-align: center;
   font-size: 12px;
   color: var(--muted);
