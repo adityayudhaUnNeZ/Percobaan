@@ -6,8 +6,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build:css": "tailwindcss -c ../tailwind.config.js -i ../frontend/src/input.css -o ../frontend/assets/styles/tailwind.generated.css",
-    "watch:css": "tailwindcss -c ../tailwind.config.js -i ../frontend/src/input.css -o ../frontend/assets/styles/tailwind.generated.css --watch",
+    "build:css": "tailwindcss -c ../tailwind.config.js -i ../frontend/src/output.source.css -o ../frontend/assets/styles/styles.css",
+    "watch:css": "tailwindcss -c ../tailwind.config.js -i ../frontend/src/output.source.css -o ../frontend/assets/styles/styles.css --watch",
     "dev": "concurrently -k \"npm:watch:css\" \"nodemon server.js\""
   },
   "dependencies": {
