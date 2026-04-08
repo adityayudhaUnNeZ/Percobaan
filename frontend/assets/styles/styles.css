@@ -338,7 +338,8 @@ button,
 .hero-grid {
   display: grid;
   gap: 24px;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  align-items: stretch;
 }
 
 .poster-wrap {
@@ -348,7 +349,7 @@ button,
 
 .poster {
   width: 100%;
-  height: 360px;
+  height: clamp(280px, 42vw, 520px);
   -o-object-fit: cover;
      object-fit: cover;
   border-radius: 16px;
@@ -357,6 +358,7 @@ button,
 .side-stack {
   display: grid;
   gap: 20px;
+  align-content: start;
 }
 
 .panel {
@@ -716,4 +718,10 @@ button,
   gap: 3rem;
   width: -moz-max-content;
   width: max-content;
+}
+
+@media (max-width: 700px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
 }
