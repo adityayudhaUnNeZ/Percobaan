@@ -2,7 +2,7 @@
   const API =
     window.location.origin && window.location.origin.startsWith("http")
       ? window.location.origin
-      : "http://172.17.10.193:8000";
+      : "http://172.17.10.46:8000";
   const $ = (id) => document.getElementById(id);
 
   const audio = $("audio");
@@ -37,7 +37,7 @@
     scheduleText: "Rabu, 4 Februari 2026 10.00-11.00 WIB",
     listenersText: "",
     topicText: "Topics: UHC",
-    streamUrl: "http://172.17.10.193:8000/radio",
+    streamUrl: "http://172.17.10.46:8000/radio",
     links: {
       youtube: "https://www.youtube.com/@dinkessemarangkota",
       instagram: "https://www.instagram.com/dkksemarang/",
@@ -48,6 +48,7 @@
   let fakeProgressTimer = null;
   let liveSource = null;
   let livePollTimer = null;
+  let liveStatusTimer = null;
   let activeTab = "salam";
   let formStatusTimer = null;
   let formStatusHideTimer = null;
@@ -117,9 +118,6 @@
       iconPlay.textContent = playing ? "pause" : "play_arrow";
     }
     btnPlay.title = playing ? "Pause" : "Play";
-    if (liveLabel) {
-      liveLabel.classList.toggle("live-on", playing);
-    }
   }
 
   function setMuteUi(muted) {
@@ -326,6 +324,45 @@
     livePollTimer = null;
   }
 
+  function setLiveStatusUi(isLive) {
+    if (!liveLabel) return;
+
+    if (isLive) {
+      liveLabel.textContent = "ON-AIR";
+      liveLabel.classList.add("live-on");
+      liveLabel.style.color = "#9f1239";
+      return;
+    }
+
+    liveLabel.textContent = "OFF-AIR";
+    liveLabel.classList.remove("live-on");
+    liveLabel.style.color = "#0f766e";
+  }
+
+  async function checkLiveStatus() {
+    try {
+      const res = await fetch(`${API}/api/status`, { cache: "no-store" });
+      if (!res.ok) throw new Error("status fetch failed");
+
+      const data = await res.json();
+      setLiveStatusUi(Boolean(data?.isLive));
+    } catch {
+      // When API is unavailable, fallback to non-live status.
+      setLiveStatusUi(false);
+    }
+  }
+
+  function stopLiveStatusPolling() {
+    if (liveStatusTimer) window.clearInterval(liveStatusTimer);
+    liveStatusTimer = null;
+  }
+
+  function startLiveStatusPolling() {
+    stopLiveStatusPolling();
+    checkLiveStatus();
+    liveStatusTimer = window.setInterval(checkLiveStatus, 5000);
+  }
+
   function startLivePolling() {
     stopLivePolling();
     fetchListenerOnce();
@@ -445,6 +482,7 @@
   setActiveTab("salam");
   renderState();
   startLiveListeners();
+  startLiveStatusPolling();
   startPosterPolling();
   setupMainForm();
 })();

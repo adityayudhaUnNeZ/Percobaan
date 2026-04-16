@@ -6,7 +6,7 @@ const axios = require("axios");
 router.get("/", async (req, res) => {
   try {
     const response = await axios.get(
-      "http://172.17.10.193:8000/status-json.xsl"
+      "http://172.17.10.46:8000/status-json.xsl"
     );
 
     const source = response.data.icestats.source;
