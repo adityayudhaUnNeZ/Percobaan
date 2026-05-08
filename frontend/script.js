@@ -2,7 +2,7 @@
   const API =
     window.location.origin && window.location.origin.startsWith("http")
       ? window.location.origin
-      : "http://172.17.10.46:8000";
+      : "http://172.17.10.103:8000";
   const $ = (id) => document.getElementById(id);
 
   const audio = $("audio");
@@ -37,7 +37,7 @@
     scheduleText: "Rabu, 4 Februari 2026 10.00-11.00 WIB",
     listenersText: "",
     topicText: "Topics: UHC",
-    streamUrl: "http://172.17.10.46:8000/radio",
+    streamUrl: "http://172.17.10.103:8000/radio",
     links: {
       youtube: "https://www.youtube.com/@dinkessemarangkota",
       instagram: "https://www.instagram.com/dkksemarang/",
@@ -151,17 +151,19 @@
     return stamp ? `${absolute}?v=${encodeURIComponent(stamp)}` : absolute;
   }
 
-  async function syncLatestPoster() {
+  async function syncActiveSessionPoster() {
     try {
-      const res = await fetch(`${API}/api/posters`, { cache: "no-store" });
-      if (!res.ok) throw new Error("poster fetch failed");
-      const posters = await res.json();
-      if (!Array.isArray(posters) || posters.length === 0) return;
+      const res = await fetch(`${API}/api/broadcast-sessions/active`, {
+        cache: "no-store",
+      });
+      if (!res.ok) throw new Error("active session fetch failed");
+      const data = await res.json();
+      const activePoster = data?.active?.poster;
+      if (!activePoster?.image_url) return;
 
-      const latest = posters[0];
       const nextPosterUrl = resolvePosterUrl(
-        latest.image_url,
-        latest.updated_at || latest.created_at || latest.id || Date.now()
+        activePoster.image_url,
+        activePoster.updated_at || activePoster.created_at || activePoster.id || Date.now()
       );
       if (!nextPosterUrl || nextPosterUrl === state.posterUrl) return;
 
@@ -181,8 +183,8 @@
 
   function startPosterPolling() {
     stopPosterPolling();
-    syncLatestPoster();
-    posterPollTimer = window.setInterval(syncLatestPoster, 8000);
+    syncActiveSessionPoster();
+    posterPollTimer = window.setInterval(syncActiveSessionPoster, 8000);
   }
 
   function renderState() {

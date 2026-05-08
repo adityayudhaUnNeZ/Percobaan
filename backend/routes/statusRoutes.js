@@ -2,27 +2,36 @@ const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 
-// cek dari icecast
+const ICECAST_STATS_URL =
+  process.env.ICECAST_STATS_URL || "http://172.17.10.103:8000/status-json.xsl";
+const ICECAST_MOUNT = process.env.ICECAST_MOUNT || "/radio";
+
+function isSourceLive(source) {
+  if (!source) return false;
+  const listenUrl = String(source.listenurl || "");
+  const mount = String(source.mount || "");
+  const sameMount =
+    (ICECAST_MOUNT && listenUrl.includes(ICECAST_MOUNT)) ||
+    (ICECAST_MOUNT && mount === ICECAST_MOUNT);
+  return Boolean(sameMount && source.title !== null);
+}
+
 router.get("/", async (req, res) => {
   try {
-    const response = await axios.get(
-      "http://172.17.10.46:8000/status-json.xsl"
-    );
+    const response = await axios.get(ICECAST_STATS_URL);
 
     const source = response.data.icestats.source;
 
-    // kalau array (lebih dari 1 mount)
     let isLive = false;
 
     if (Array.isArray(source)) {
-      const liveSource = source.find((s) => s.listenurl.includes("/radio"));
-      isLive = liveSource && liveSource.title !== null;
+      isLive = source.some(isSourceLive);
     } else {
-      isLive = source && source.title !== null;
+      isLive = isSourceLive(source);
     }
 
     res.json({
-      isLive: isLive,
+      isLive,
     });
   } catch (err) {
     res.json({

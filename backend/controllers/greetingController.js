@@ -1,4 +1,5 @@
 const { createGreeting, getGreetings } = require("../models/greetingModel");
+const { getActiveSession } = require("../models/broadcastSessionModel");
 
 function normalizeText(value) {
   return typeof value === "string" ? value.trim() : "";
@@ -22,7 +23,13 @@ exports.addGreeting = async (req, res) => {
       });
     }
 
-    await createGreeting({ name, origin, message });
+    const activeSession = await getActiveSession();
+    await createGreeting({
+      name,
+      origin,
+      message,
+      session_id: activeSession?.id || null,
+    });
     res.json({ message: "Titip salam berhasil!" });
   } catch (err) {
     res.status(500).json({ error: err.message });

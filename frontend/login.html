@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Admin - Minkes Radio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="min-h-screen bg-[radial-gradient(circle_at_top,_#cffafe,_#f8fafc_45%,_#e2e8f0_100%)] p-4 font-sans text-slate-900">
+    <main class="mx-auto mt-12 w-full max-w-md rounded-3xl border border-slate-200 bg-white/95 p-8 shadow-xl shadow-slate-200/80">
+      <p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-700">Admin Access</p>
+      <h1 class="mt-2 text-2xl font-bold">Login Dashboard</h1>
+      <p class="mt-2 text-sm text-slate-600">Masuk untuk mengakses halaman admin Minkes Radio.</p>
+
+      <form id="loginForm" class="mt-6 grid gap-4">
+        <input
+          id="username"
+          type="text"
+          autocomplete="username"
+          placeholder="Username"
+          class="rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-cyan-500"
+          required
+        />
+        <input
+          id="password"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Password"
+          class="rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-cyan-500"
+          required
+        />
+        <button
+          type="submit"
+          class="rounded-full bg-cyan-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-700"
+        >
+          Masuk
+        </button>
+      </form>
+
+      <p id="status" class="mt-4 hidden rounded-2xl px-4 py-3 text-sm font-medium"></p>
+    </main>
+
+    <script>
+      const form = document.getElementById("loginForm");
+      const statusNode = document.getElementById("status");
+
+      function setStatus(message, type) {
+        statusNode.textContent = message;
+        statusNode.className =
+          "mt-4 rounded-2xl px-4 py-3 text-sm font-medium " +
+          (type === "error"
+            ? "bg-rose-100 text-rose-700"
+            : "bg-emerald-100 text-emerald-700");
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value;
+        try {
+          const response = await fetch("/admin/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password }),
+          });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data?.error || "Login gagal.");
+          }
+          setStatus("Login berhasil. Mengalihkan ke dashboard...", "success");
+          window.location.href = data?.redirect || "/admin/dashboard";
+        } catch (error) {
+          setStatus(error.message || "Login gagal.", "error");
+        }
+      });
+    </script>
+  </body>
+</html>

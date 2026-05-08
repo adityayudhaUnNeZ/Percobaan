@@ -3,22 +3,35 @@ const http = require("http");
 const https = require("https");
 const express = require("express");
 const cors = require("cors");
+const { updateActiveSessionPeak } = require("./models/broadcastSessionModel");
+const {
+  requireAdminAuth,
+} = require("./middleware/adminAuth");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+app.use("/admin", require("./routes/authRoutes"));
+app.get("/admin/dashboard", requireAdminAuth, (_req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend", "dashboard.html"));
+});
+app.get("/dashboard.html", requireAdminAuth, (_req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend", "dashboard.html"));
+});
+
 app.use("/api/greetings", require("./routes/greetingRoutes"));
 app.use("/api/requests", require("./routes/requestRoutes"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/posters", require("./routes/posterRoutes"));
 app.use("/api/status", require("./routes/statusRoutes"));
+app.use("/api/broadcast-sessions", require("./routes/broadcastSessionRoutes"));
 
 app.use(express.static(path.join(__dirname, "../frontend")));
 
 const ICECAST_STATS_URL =
-  process.env.ICECAST_STATS_URL || "http://172.17.10.46:8000/status-json.xsl";
+  process.env.ICECAST_STATS_URL || "http://172.17.10.103:8000/status-json.xsl";
 const ICECAST_MOUNT = process.env.ICECAST_MOUNT || "/radio";
 const ICECAST_USER = process.env.ICECAST_USER || "";
 const ICECAST_PASSWORD = process.env.ICECAST_PASSWORD || "";
@@ -117,6 +130,9 @@ async function refreshListenerCount() {
     if (typeof listeners === "number") {
       liveListenerCount = listeners;
       lastUpdatedAt = new Date().toISOString();
+      await updateActiveSessionPeak(listeners, lastUpdatedAt).catch(() => {
+        // Keep listener endpoint healthy even when session update fails.
+      });
       lastRefreshError = null;
       broadcastListeners();
       return;

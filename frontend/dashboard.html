@@ -4,72 +4,435 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard - Minkes Radio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      html {
+        scroll-behavior: auto;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+      }
+      .dashboard-panel {
+        display: none;
+        height: 100%;
+        overflow-y: auto;
+      }
+      .dashboard-panel.active {
+        display: block;
+      }
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: "Manrope", sans-serif;
+        letter-spacing: -0.02em;
+      }
+      .metric-number {
+        font-family: "Manrope", sans-serif;
+        letter-spacing: -0.03em;
+      }
+    </style>
   </head>
-  <body class="bg-slate-100 p-4 md:p-6">
-    <h1 class="text-3xl font-bold mb-6 text-slate-900">
-      Dashboard Admin Minkes Radio
-    </h1>
+  <body class="bg-[radial-gradient(circle_at_top,_#e0f2fe,_#f8fafc_40%,_#f1f5f9_100%)] p-4 text-slate-900 md:p-6">
+    <div class="mx-auto flex h-full max-w-7xl gap-4">
+      <aside class="w-64 shrink-0 rounded-[1.75rem] border border-slate-200/80 bg-white/90 p-4 shadow-lg shadow-slate-200/70 backdrop-blur">
+        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-slate-500">Menu</p>
+        <h2 class="mt-2 text-lg font-bold text-slate-900">Dashboard Admin</h2>
+        <div class="mt-4 grid gap-2">
+          <button
+            type="button"
+            data-nav-link
+            data-target="overviewSection"
+            class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-left text-sm font-semibold text-slate-700 transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-700"
+          >
+            Ringkasan
+          </button>
+          <button
+            type="button"
+            data-nav-link
+            data-target="controlSection"
+            class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-left text-sm font-semibold text-slate-700 transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-700"
+          >
+            Kontrol Siaran
+          </button>
+          <button
+            type="button"
+            data-nav-link
+            data-target="inboxSection"
+            class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-left text-sm font-semibold text-slate-700 transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-700"
+          >
+            Inbox
+          </button>
+          <button
+            type="button"
+            data-nav-link
+            data-target="reportSection"
+            class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-left text-sm font-semibold text-slate-700 transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-700"
+          >
+            Rekap
+          </button>
+        </div>
+        <button
+          type="button"
+          id="logoutButton"
+          class="mt-4 w-full rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-left text-sm font-semibold text-rose-700 transition hover:border-rose-300 hover:bg-rose-100"
+        >
+          Logout Admin
+        </button>
+      </aside>
 
-    <div class="bg-white p-4 rounded-xl shadow mb-6 border border-slate-200">
-      <h2 class="text-xl font-semibold mb-2">Upload Poster</h2>
-      <input
-        type="text"
-        id="title"
-        placeholder="Judul Poster"
-        class="border p-2 w-full mb-2"
-      />
-      <input type="file" id="image" class="mb-2" />
-      <button
-        onclick="uploadPoster()"
-        class="bg-blue-500 text-white px-4 py-2 rounded"
+      <main class="min-h-0 flex-1">
+      <section
+        id="overviewSection"
+        class="dashboard-panel active overflow-hidden rounded-[2rem] bg-[linear-gradient(135deg,#020617_0%,#082f49_35%,#0ea5e9_100%)] px-7 py-7 text-white shadow-2xl shadow-sky-950/30"
       >
-        Upload
-      </button>
-    </div>
+        <div class="relative">
+          <div class="pointer-events-none absolute -right-12 -top-10 h-44 w-44 rounded-full bg-cyan-300/25 blur-3xl"></div>
+          <div class="pointer-events-none absolute -bottom-20 left-1/3 h-56 w-56 rounded-full bg-sky-200/20 blur-3xl"></div>
+        </div>
+        <div class="relative flex h-full flex-col gap-7">
+          <div class="max-w-4xl space-y-3">
+            <p class="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.26em] text-cyan-100">
+              ON AIR COMMAND CENTER
+            </p>
+            <h1 class="text-3xl font-extrabold leading-tight md:text-5xl">
+              Minkes Radio Dashboard
+            </h1>
+            <p class="max-w-3xl text-sm leading-relaxed text-slate-100/90 md:text-base">
+              Siaran live, listener real-time, dan rekap interaksi pendengar
+              dalam satu panel cepat untuk tim admin.
+            </p>
+          </div>
 
-    <div class="bg-white p-4 rounded-xl shadow mb-6 border border-slate-200">
-      <h2 class="text-xl font-semibold mb-2">Poster Terbaru</h2>
-      <div id="posterList"></div>
-    </div>
+          <div class="grid gap-4 md:grid-cols-3">
+            <div
+              class="rounded-2xl border border-white/25 bg-black/20 px-5 py-5 backdrop-blur-md"
+            >
+              <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-100/90">
+                Listener Live
+              </p>
+              <p id="listenerNow" class="metric-number mt-2 text-4xl font-extrabold leading-none">0</p>
+              <p id="listenerUpdated" class="mt-2 text-xs text-slate-100/85">
+                Update terakhir -
+              </p>
+            </div>
+            <div class="rounded-2xl border border-white/25 bg-black/20 px-5 py-5 backdrop-blur-md">
+              <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-100/90">
+                Status Siaran
+              </p>
+              <p id="heroSessionStatus" class="mt-2 text-2xl font-bold leading-tight">Belum aktif</p>
+              <p class="mt-2 text-xs text-slate-100/85">Pantau sesi berjalan dari panel kontrol.</p>
+            </div>
+            <div class="rounded-2xl border border-white/25 bg-black/20 px-5 py-5 backdrop-blur-md">
+              <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-100/90">
+                Ringkasan Aksi
+              </p>
+              <p class="mt-2 text-2xl font-bold leading-tight">Kelola cepat</p>
+              <p class="mt-2 text-xs text-slate-100/85">Kontrol, inbox, poster, dan rekap dalam satu alur.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    <div class="bg-white p-4 rounded-xl shadow mb-6 border border-slate-200">
-      <div class="flex items-center justify-between gap-3 mb-2">
-        <h2 class="text-xl font-semibold">Penerimaan Titip Salam</h2>
-        <span
-          id="greetingsCount"
-          class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700"
-          >0 masuk</span
-        >
-      </div>
-      <p class="text-sm text-slate-600 mb-3">
-        Daftar pesan salam terbaru dari pendengar. Periksa nama pengirim, asal,
-        dan isi salam sebelum dibacakan.
-      </p>
-      <div id="greetingsList" class="space-y-3"></div>
-    </div>
+      <section id="controlSection" class="dashboard-panel rounded-[2rem] border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-200/70">
+          <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+            <div class="max-w-2xl">
+              <h2 class="mt-2 text-2xl font-bold text-slate-900">
+                Kontrol sesi siaran
+              </h2>
+              <p class="mt-2 text-sm text-slate-600">
+                Isi detail siaran, mulai sesi, lalu akhiri saat program selesai.
+                Data salam dan request otomatis dikelompokkan ke sesi yang aktif.
+              </p>
+            </div>
+            <div class="grid gap-3 sm:grid-cols-3 lg:min-w-[320px] lg:max-w-[360px]">
+              <div class="rounded-2xl bg-slate-100 p-4">
+                <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+                  Puncak
+                </p>
+                <p id="peakListeners" class="metric-number mt-2 text-3xl font-bold text-slate-900">0</p>
+              </div>
+              <div class="rounded-2xl bg-cyan-50 p-4">
+                <p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-700">
+                  Salam
+                </p>
+                <p id="activeGreetingsTotal" class="metric-number mt-2 text-3xl font-bold text-cyan-900">0</p>
+              </div>
+              <div class="rounded-2xl bg-emerald-50 p-4">
+                <p class="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700">
+                  Request
+                </p>
+                <p id="activeRequestsTotal" class="metric-number mt-2 text-3xl font-bold text-emerald-900">0</p>
+              </div>
+            </div>
+          </div>
 
-    <div class="bg-white p-4 rounded-xl shadow border border-slate-200">
-      <div class="flex items-center justify-between gap-3 mb-2">
-        <h2 class="text-xl font-semibold">Penerimaan Request Lagu</h2>
-        <span
-          id="requestsCount"
-          class="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-100 text-emerald-700"
-          >0 masuk</span
-        >
-      </div>
-      <p class="text-sm text-slate-600 mb-3">
-        Prioritaskan request dengan data lengkap: pengirim, judul lagu, dan
-        penyanyi.
-      </p>
-      <div id="requestList" class="space-y-3"></div>
+          <div class="mt-6 grid gap-6 xl:grid-cols-[1.05fr,0.95fr]">
+            <div class="rounded-3xl border border-slate-200 bg-slate-50/80 p-5">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <p class="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-700">
+                    Kontrol Siaran
+                  </p>
+                  <h3 class="mt-2 text-xl font-bold text-slate-900">
+                    Mulai dan akhiri sesi
+                  </h3>
+                </div>
+                <span
+                  id="sessionBadge"
+                  class="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700"
+                  >Belum aktif</span
+                >
+              </div>
+
+              <form id="sessionForm" class="mt-5 grid gap-3 md:grid-cols-2">
+                <input
+                  type="text"
+                  id="hostName"
+                  placeholder="Nama penyiar"
+                  class="rounded-2xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-cyan-500"
+                />
+                <input
+                  type="text"
+                  id="programTitle"
+                  placeholder="Nama program siaran"
+                  class="rounded-2xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-cyan-500"
+                />
+                <textarea
+                  id="topic"
+                  placeholder="Tema siaran"
+                  class="min-h-[116px] rounded-2xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-cyan-500 md:col-span-2"
+                ></textarea>
+
+                <div class="rounded-3xl border border-slate-200 bg-white p-4 md:col-span-2">
+                  <button
+                    type="button"
+                    onclick="uploadPoster()"
+                    class="mt-4 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+                  >
+                    Upload Poster Terbaru
+                  </button>
+                  <div id="posterUploadStatus" class="mt-4 inline-block"></div>
+                </div>
+
+                <div class="flex flex-col gap-3 sm:flex-row md:col-span-2">
+                  <button
+                    type="submit"
+                    id="startSessionButton"
+                    class="flex-1 rounded-full bg-cyan-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-700"
+                  >
+                    Mulai Siaran
+                  </button>
+                  <button
+                    type="button"
+                    id="stopSessionButton"
+                    class="flex-1 rounded-full bg-rose-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+                    disabled
+                  >
+                    Selesai Siaran
+                  </button>
+                </div>
+              </form>
+
+              <p
+                id="sessionStatus"
+                class="mt-4 hidden rounded-2xl px-4 py-3 text-sm font-medium"
+              ></p>
+            </div>
+
+            <div class="rounded-3xl border border-slate-200 bg-white p-5">
+              <p class="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-700">
+                Sesi Aktif
+              </p>
+              <h3 class="mt-2 text-xl font-bold text-slate-900">
+                Detail siaran berjalan
+              </h3>
+              <div
+                id="activeSessionMeta"
+                class="mt-5 space-y-3 rounded-2xl bg-slate-50 p-4 text-sm text-slate-700"
+              ></div>
+            </div>
+          </div>
+      </section>
+
+      <section id="inboxSection" class="dashboard-panel rounded-[2rem] border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-200/70">
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 class="mt-2 text-2xl font-bold text-slate-900">
+              Inbox siaran aktif
+            </h2>
+            <p class="mt-2 text-sm text-slate-600">
+              Semua pesan terbaru ditampilkan berdampingan supaya admin bisa membaca tanpa pindah-pindah area.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-6 grid gap-6 lg:grid-cols-2">
+          <div class="rounded-3xl border border-slate-200 bg-white p-5">
+          <div class="flex items-center justify-between gap-3">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-700">
+                Titip Salam
+              </p>
+              <h2 class="mt-2 text-2xl font-bold text-slate-900">
+                Pesan pada sesi aktif
+              </h2>
+            </div>
+            <span
+              id="greetingsCount"
+              class="rounded-full bg-cyan-100 px-3 py-1 text-xs font-semibold text-cyan-700"
+              >0 masuk</span
+            >
+          </div>
+          <div id="greetingsList" class="mt-4 max-h-[520px] space-y-3 overflow-y-auto pr-1"></div>
+          </div>
+
+          <div class="rounded-3xl border border-slate-200 bg-white p-5">
+          <div class="flex items-center justify-between gap-3">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.28em] text-emerald-700">
+                Request Lagu
+              </p>
+              <h2 class="mt-2 text-2xl font-bold text-slate-900">
+                Request pada sesi aktif
+              </h2>
+            </div>
+            <span
+              id="requestsCount"
+              class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700"
+              >0 masuk</span
+            >
+          </div>
+          <div id="requestList" class="mt-4 max-h-[520px] space-y-3 overflow-y-auto pr-1"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="reportSection" class="dashboard-panel rounded-[2rem] border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-200/70">
+          <div class="flex items-center justify-between gap-3">
+            <div>
+              <h2 class="mt-2 text-2xl font-bold text-slate-900">
+                Rekap siaran selesai
+              </h2>
+              <p class="mt-2 text-sm text-slate-600">
+                Pilih sesi di kiri, lalu lihat detail ringkas/salam/request di panel kanan.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-5 grid h-[calc(100%-88px)] min-h-[520px] gap-6 lg:grid-cols-[0.72fr,1.28fr]">
+            <div class="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <h3 class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">
+                    Riwayat Sesi
+                  </h3>
+                </div>
+                <span
+                  id="sessionHistoryCount"
+                  class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
+                >
+                  0 sesi
+                </span>
+              </div>
+              <div class="mt-4 grid gap-3">
+                <input
+                  type="date"
+                  id="sessionDateFilter"
+                  class="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-cyan-500"
+                />
+                <input
+                  type="text"
+                  id="sessionHostFilter"
+                  placeholder="Filter nama penyiar..."
+                  class="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-cyan-500"
+                />
+                <input
+                  type="search"
+                  id="sessionHistorySearch"
+                  placeholder="Cari kata kunci..."
+                  class="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-cyan-500"
+                />
+              </div>
+              <div
+                id="sessionHistoryList"
+                class="mt-3 max-h-[640px] space-y-3 overflow-y-auto pr-1"
+              ></div>
+              <div id="sessionHistoryPager" class="mt-3 flex items-center justify-between gap-3"></div>
+            </div>
+
+            <div class="rounded-3xl border border-slate-200 bg-white p-5">
+              <div id="selectedSessionSummary" class="rounded-2xl bg-slate-100 p-4"></div>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <button type="button" data-report-tab="summary" class="report-tab rounded-full border border-cyan-500 bg-cyan-600 px-4 py-2 text-sm font-semibold text-white">Ringkasan</button>
+                <button type="button" data-report-tab="greetings" class="report-tab rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700">Titip Salam</button>
+                <button type="button" data-report-tab="requests" class="report-tab rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700">Request Lagu</button>
+              </div>
+              <div id="reportTabSummary" class="mt-4 max-h-[520px] space-y-3 overflow-y-auto pr-1"></div>
+
+              <div id="reportTabGreetings" class="mt-4 hidden max-h-[520px] space-y-3 overflow-y-auto pr-1">
+                <div class="flex items-center justify-between gap-3">
+                  <h3 class="text-lg font-semibold text-slate-900">Titip Salam Terekam</h3>
+                  <span
+                    id="selectedGreetingsCount"
+                    class="rounded-full bg-cyan-100 px-3 py-1 text-xs font-semibold text-cyan-700"
+                    >0 item</span
+                  >
+                </div>
+                <div id="selectedGreetingsList" class="mt-4 space-y-3"></div>
+              </div>
+
+              <div id="reportTabRequests" class="mt-4 hidden max-h-[520px] space-y-3 overflow-y-auto pr-1">
+                <div class="flex items-center justify-between gap-3">
+                  <h3 class="text-lg font-semibold text-slate-900">Request Lagu Terekam</h3>
+                  <span
+                    id="selectedRequestsCount"
+                    class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700"
+                    >0 item</span
+                  >
+                </div>
+                <div id="selectedRequestsList" class="mt-4 space-y-3"></div>
+              </div>
+            </div>
+          </div>
+      </section>
+      </main>
     </div>
 
     <script>
       const API =
         window.location.origin && window.location.origin.startsWith("http")
           ? window.location.origin
-          : "http://172.17.10.46:8000";
+          : "http://172.17.10.103:8000";
+      const SESSION_API = API + "/api/broadcast-sessions";
+      const state = {
+        activeSession: null,
+        latestPoster: null,
+        readyPoster: null,
+        selectedSessionId: null,
+        sessions: [],
+        sessionPage: 1,
+        sessionLimit: 20,
+        sessionTotalPages: 1,
+        sessionTotalItems: 0,
+        sessionHistoryQuery: "",
+        sessionHostQuery: "",
+        sessionDateQuery: "",
+        sessionSort: "started_at",
+        sessionOrder: "desc",
+        reportTab: "summary",
+      };
 
       function resetNode(node) {
         while (node.firstChild) {
@@ -88,6 +451,31 @@
           hour: "2-digit",
           minute: "2-digit",
         });
+      }
+
+      function formatListeners(value) {
+        const amount = Number.isFinite(Number(value)) ? Number(value) : 0;
+        return amount.toLocaleString("id-ID");
+      }
+
+      function normalizeSearchText(value) {
+        return String(value || "").toLocaleLowerCase("id-ID");
+      }
+
+      function getSessionSearchText(session) {
+        return normalizeSearchText(
+          [
+            session?.host_name,
+            session?.program_title,
+            session?.topic,
+            formatDateTime(session?.started_at),
+            formatDateTime(session?.ended_at),
+            formatListeners(session?.peak_listeners),
+            session?.peak_listeners,
+            session?.greetings_count,
+            session?.requests_count,
+          ].join(" ")
+        );
       }
 
       function buildField(label, value) {
@@ -113,23 +501,6 @@
           "rounded-lg border border-dashed border-slate-300 bg-slate-50 p-3 text-sm text-slate-600";
         empty.textContent = text;
         container.appendChild(empty);
-      }
-
-      function appendPoster(container, poster) {
-        const card = document.createElement("div");
-        card.className = "mb-2";
-
-        const title = document.createElement("p");
-        title.textContent = poster.title || "(Tanpa judul)";
-
-        const image = document.createElement("img");
-        image.className = "w-48";
-        image.alt = poster.title || "Poster";
-        image.src = `${API}${poster.image_url}`;
-
-        card.appendChild(title);
-        card.appendChild(image);
-        container.appendChild(card);
       }
 
       function appendGreetingCard(container, greeting) {
@@ -176,25 +547,142 @@
           return "File gambar wajib dipilih sebelum upload.";
         }
 
+        if (message.includes("wajib diisi")) {
+          return message;
+        }
+
         return message;
       }
 
-      async function loadData() {
-        const [greetings, requests, posters] = await Promise.all([
-          fetch(API + "/api/greetings").then((r) => r.json()),
-          fetch(API + "/api/requests").then((r) => r.json()),
-          fetch(API + "/api/posters").then((r) => r.json()),
-        ]);
+      function setSessionStatus(message, type) {
+        const status = document.getElementById("sessionStatus");
+        if (!status) return;
 
+        if (!message) {
+          status.className = "mt-4 hidden rounded-2xl px-4 py-3 text-sm font-medium";
+          status.textContent = "";
+          return;
+        }
+
+        const colorMap = {
+          success: "bg-emerald-50 text-emerald-700 border border-emerald-200",
+          error: "bg-rose-50 text-rose-700 border border-rose-200",
+          info: "bg-cyan-50 text-cyan-700 border border-cyan-200",
+        };
+
+        status.className = `mt-4 rounded-2xl px-4 py-3 text-sm font-medium ${
+          colorMap[type] || colorMap.info
+        }`;
+        status.textContent = message;
+      }
+
+      function buildPosterCard(poster, options = {}) {
+        const wrapper = document.createElement("div");
+        wrapper.className =
+          options.compact
+            ? "inline-block rounded-2xl border border-slate-200 bg-white p-3"
+            : "inline-block rounded-3xl border border-slate-200 bg-white p-4";
+
+        if (!poster?.image_url) {
+          const text = document.createElement("p");
+          text.className = "text-sm text-slate-600";
+          text.textContent = options.emptyText || "Poster belum tersedia.";
+          wrapper.appendChild(text);
+          return wrapper;
+        }
+
+        const label = document.createElement("p");
+        label.className = "text-xs font-semibold uppercase tracking-[0.24em] text-slate-500";
+        label.textContent = options.label || "Poster";
+        wrapper.appendChild(label);
+
+        const title = document.createElement("p");
+        title.className = "mt-2 text-sm font-semibold text-slate-900";
+        title.textContent = poster.title || "";
+        wrapper.appendChild(title);
+
+        const image = document.createElement("img");
+        image.className = options.compact
+          ? "mt-3 max-h-72 w-auto max-w-full rounded-2xl object-contain"
+          : "mt-3 max-h-[28rem] w-auto max-w-full rounded-2xl object-contain";
+        image.alt = poster.title || "Poster";
+        image.src = `${API}${poster.image_url}`;
+        wrapper.appendChild(image);
+
+        return wrapper;
+      }
+
+      function syncReadyPoster(posters) {
+        state.latestPoster = Array.isArray(posters) && posters.length > 0 ? posters[0] : null;
+
+        if (state.activeSession?.poster?.id) {
+          state.readyPoster = null;
+          return;
+        }
+        state.readyPoster = state.latestPoster;
+      }
+
+      function renderPosterUploadStatus() {
+        const container = document.getElementById("posterUploadStatus");
+        if (!container) return;
+
+        resetNode(container);
+
+        if (state.activeSession?.poster) {
+          container.appendChild(
+            buildPosterCard(state.activeSession.poster, {
+              compact: true,
+              label: "Poster Sesi Aktif",
+            })
+          );
+          return;
+        }
+
+        if (state.readyPoster) {
+          container.appendChild(
+            buildPosterCard(state.readyPoster, {
+              compact: true,
+              label: "Poster",
+            })
+          );
+
+          const note = document.createElement("p");
+          note.className = "mt-3 text-sm text-emerald-700";
+          note.textContent =
+            "Poster terbaru sudah siap. Anda bisa mulai siaran dengan poster ini.";
+          container.appendChild(note);
+          return;
+        }
+
+        const message = document.createElement("div");
+        message.className =
+          "rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-600";
+        message.textContent =
+          "Belum ada poster baru yang siap dipakai. Klik Upload Poster Terbaru sebelum memulai siaran.";
+        container.appendChild(message);
+      }
+
+      function renderListenerCard(listeners) {
+        const listenerNow = document.getElementById("listenerNow");
+        const listenerUpdated = document.getElementById("listenerUpdated");
+        if (listenerNow) listenerNow.textContent = formatListeners(listeners?.count);
+        if (listenerUpdated) {
+          listenerUpdated.textContent = listeners?.updatedAt
+            ? `Terakhir update ${formatDateTime(listeners.updatedAt)}`
+            : "Terakhir update -";
+        }
+      }
+
+      function renderActiveLists(session) {
         const greetingsList = document.getElementById("greetingsList");
         const requestList = document.getElementById("requestList");
-        const posterList = document.getElementById("posterList");
         const greetingsCount = document.getElementById("greetingsCount");
         const requestsCount = document.getElementById("requestsCount");
+        const greetings = Array.isArray(session?.greetings) ? session.greetings : [];
+        const requests = Array.isArray(session?.requests) ? session.requests : [];
 
         resetNode(greetingsList);
         resetNode(requestList);
-        resetNode(posterList);
 
         if (greetingsCount)
           greetingsCount.textContent = `${greetings.length} masuk`;
@@ -204,35 +692,337 @@
         if (greetings.length === 0) {
           appendEmptyState(
             greetingsList,
-            "Belum ada titip salam masuk saat ini."
+            session
+              ? "Belum ada titip salam yang masuk pada sesi ini."
+              : "Belum ada sesi aktif. Mulai siaran untuk merekam titip salam."
           );
         } else {
-          greetings.forEach((g) => appendGreetingCard(greetingsList, g));
+          greetings.forEach((greeting) =>
+            appendGreetingCard(greetingsList, greeting)
+          );
         }
 
         if (requests.length === 0) {
           appendEmptyState(
             requestList,
-            "Belum ada request lagu dengan status pending."
+            session
+              ? "Belum ada request lagu yang masuk pada sesi ini."
+              : "Belum ada sesi aktif. Mulai siaran untuk merekam request lagu."
           );
         } else {
-          requests.forEach((r) => appendRequestCard(requestList, r));
+          requests.forEach((request) => appendRequestCard(requestList, request));
         }
-
-        posters.forEach((p) => appendPoster(posterList, p));
       }
 
-      async function uploadPoster() {
-        const imageInput = document.getElementById("image");
-        const selectedFile = imageInput.files[0];
+      function renderActiveSession(session) {
+        const badge = document.getElementById("sessionBadge");
+        const meta = document.getElementById("activeSessionMeta");
+        const peak = document.getElementById("peakListeners");
+        const activeGreetingsTotal = document.getElementById("activeGreetingsTotal");
+        const activeRequestsTotal = document.getElementById("activeRequestsTotal");
+        const startButton = document.getElementById("startSessionButton");
+        const stopButton = document.getElementById("stopSessionButton");
+        const hostName = document.getElementById("hostName");
+        const programTitle = document.getElementById("programTitle");
+        const topic = document.getElementById("topic");
+        const heroStatus = document.getElementById("heroSessionStatus");
 
-        if (!selectedFile) {
-          alert("Silakan pilih file gambar terlebih dahulu.");
+        resetNode(meta);
+        state.activeSession = session || null;
+
+        if (!session) {
+          if (badge) {
+            badge.textContent = "Belum aktif";
+            badge.className =
+              "rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700";
+          }
+          if (peak) peak.textContent = "0";
+          if (activeGreetingsTotal) activeGreetingsTotal.textContent = "0";
+          if (activeRequestsTotal) activeRequestsTotal.textContent = "0";
+          if (heroStatus) heroStatus.textContent = "Belum aktif";
+          if (startButton) startButton.disabled = false;
+          if (stopButton) stopButton.disabled = true;
+          if (hostName) hostName.disabled = false;
+          if (programTitle) programTitle.disabled = false;
+          if (topic) topic.disabled = false;
+          appendEmptyState(
+            meta,
+            "Belum ada sesi aktif. Klik Mulai Siaran untuk mulai merekam sesi."
+          );
+          renderPosterUploadStatus();
+          renderActiveLists(null);
           return;
         }
 
+        if (badge) {
+          badge.textContent = "Sedang aktif";
+          badge.className =
+            "rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700";
+        }
+
+        if (peak) peak.textContent = formatListeners(session.peak_listeners);
+        if (activeGreetingsTotal)
+          activeGreetingsTotal.textContent = String(session.greetings_count || 0);
+        if (activeRequestsTotal)
+          activeRequestsTotal.textContent = String(session.requests_count || 0);
+        if (heroStatus) heroStatus.textContent = "Sedang aktif";
+        if (startButton) startButton.disabled = true;
+        if (stopButton) stopButton.disabled = false;
+        if (hostName) hostName.disabled = true;
+        if (programTitle) programTitle.disabled = true;
+        if (topic) topic.disabled = true;
+
+        meta.appendChild(buildField("Penyiar", session.host_name));
+        meta.appendChild(buildField("Program", session.program_title));
+        meta.appendChild(buildField("Tema", session.topic));
+        meta.appendChild(buildField("Mulai Siaran", formatDateTime(session.started_at)));
+        if (session.peak_reached_at) {
+          meta.appendChild(
+            buildField("Waktu Puncak", formatDateTime(session.peak_reached_at))
+          );
+        }
+        if (session.poster?.title || session.poster?.image_url) {
+          meta.appendChild(buildPosterCard(session.poster, { compact: true, label: "Poster Dipakai" }));
+        }
+
+        renderPosterUploadStatus();
+        renderActiveLists(session);
+      }
+
+      function renderSessionSummary(report) {
+        const summary = document.getElementById("selectedSessionSummary");
+        const summaryTab = document.getElementById("reportTabSummary");
+        const selectedGreetingsCount = document.getElementById("selectedGreetingsCount");
+        const selectedRequestsCount = document.getElementById("selectedRequestsCount");
+        const selectedGreetingsList = document.getElementById("selectedGreetingsList");
+        const selectedRequestsList = document.getElementById("selectedRequestsList");
+
+        resetNode(summary);
+        resetNode(summaryTab);
+        resetNode(selectedGreetingsList);
+        resetNode(selectedRequestsList);
+
+        if (!report) {
+          appendEmptyState(summary, "Belum ada siaran yang selesai direkap.");
+          appendEmptyState(summaryTab, "Pilih sesi dari daftar kiri untuk melihat detail.");
+          if (selectedGreetingsCount) selectedGreetingsCount.textContent = "0 item";
+          if (selectedRequestsCount) selectedRequestsCount.textContent = "0 item";
+          appendEmptyState(selectedGreetingsList, "Belum ada titip salam terekam.");
+          appendEmptyState(selectedRequestsList, "Belum ada request lagu terekam.");
+          return;
+        }
+
+        summary.appendChild(buildField("Penyiar", report.host_name));
+        summary.appendChild(buildField("Program", report.program_title));
+        summary.appendChild(buildField("Tema", report.topic));
+
+        summaryTab.appendChild(buildField("Mulai", formatDateTime(report.started_at)));
+        summaryTab.appendChild(buildField("Selesai", formatDateTime(report.ended_at)));
+        summaryTab.appendChild(
+          buildField("Puncak Pendengar", `${formatListeners(report.peak_listeners)} listener`)
+        );
+        if (report.poster) {
+          summaryTab.appendChild(buildPosterCard(report.poster, { compact: false, label: "Poster Sesi" }));
+        }
+
+        const greetings = Array.isArray(report.greetings) ? report.greetings : [];
+        const requests = Array.isArray(report.requests) ? report.requests : [];
+
+        if (selectedGreetingsCount)
+          selectedGreetingsCount.textContent = `${greetings.length} item`;
+        if (selectedRequestsCount)
+          selectedRequestsCount.textContent = `${requests.length} item`;
+
+        if (greetings.length === 0) {
+          appendEmptyState(selectedGreetingsList, "Tidak ada titip salam pada sesi ini.");
+        } else {
+          greetings.forEach((item) => appendGreetingCard(selectedGreetingsList, item));
+        }
+
+        if (requests.length === 0) {
+          appendEmptyState(selectedRequestsList, "Tidak ada request lagu pada sesi ini.");
+        } else {
+          requests.forEach((item) => appendRequestCard(selectedRequestsList, item));
+        }
+
+        setActiveReportTab(state.reportTab);
+      }
+
+      function setActiveReportTab(tabName) {
+        state.reportTab = tabName;
+        const tabs = {
+          summary: document.getElementById("reportTabSummary"),
+          greetings: document.getElementById("reportTabGreetings"),
+          requests: document.getElementById("reportTabRequests"),
+        };
+        Object.entries(tabs).forEach(([name, el]) => {
+          if (!el) return;
+          el.classList.toggle("hidden", name !== tabName);
+        });
+        document.querySelectorAll(".report-tab").forEach((button) => {
+          const isActive = button.getAttribute("data-report-tab") === tabName;
+          button.className =
+            "report-tab rounded-full border px-4 py-2 text-sm font-semibold transition " +
+            (isActive
+              ? "border-cyan-500 bg-cyan-600 text-white"
+              : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50");
+        });
+      }
+
+      function renderSessionHistory(sessions) {
+        const historyList = document.getElementById("sessionHistoryList");
+        const historyCount = document.getElementById("sessionHistoryCount");
+        const pager = document.getElementById("sessionHistoryPager");
+        resetNode(historyList);
+        if (pager) resetNode(pager);
+
+        if (!Array.isArray(sessions) || sessions.length === 0) {
+          if (historyCount) historyCount.textContent = "0 sesi";
+          appendEmptyState(historyList, "Belum ada riwayat sesi siaran.");
+          return;
+        }
+        if (historyCount) {
+          historyCount.textContent = `${state.sessionTotalItems} sesi`;
+        }
+        sessions.forEach((session) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className =
+            "w-full rounded-2xl border px-4 py-3 text-left transition " +
+            (state.selectedSessionId === session.id
+              ? "border-cyan-500 bg-cyan-50"
+              : "border-slate-200 bg-white hover:bg-slate-50");
+
+          const title = document.createElement("p");
+          title.className = "font-semibold text-slate-900";
+          title.textContent = `${session.host_name} - ${session.program_title}`;
+
+          const meta = document.createElement("p");
+          meta.className = "mt-1 text-sm text-slate-600";
+          meta.textContent = `${formatDateTime(session.started_at)} | Peak ${formatListeners(
+            session.peak_listeners
+          )}`;
+
+          const counts = document.createElement("p");
+          counts.className =
+            "mt-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500";
+          counts.textContent = `${session.greetings_count || 0} salam | ${
+            session.requests_count || 0
+          } request`;
+
+          button.appendChild(title);
+          button.appendChild(meta);
+          button.appendChild(counts);
+          button.addEventListener("click", () => {
+            loadSessionReport(session.id).catch(() => {});
+          });
+
+          historyList.appendChild(button);
+        });
+        if (pager) {
+          const prev = document.createElement("button");
+          prev.type = "button";
+          prev.textContent = "Prev";
+          prev.disabled = state.sessionPage <= 1;
+          prev.className = "rounded-full border border-slate-300 px-3 py-1 text-xs disabled:opacity-40";
+          prev.addEventListener("click", () => {
+            state.sessionPage = Math.max(1, state.sessionPage - 1);
+            loadDashboard().catch(() => {});
+          });
+          const info = document.createElement("span");
+          info.className = "text-xs font-semibold text-slate-600";
+          info.textContent = `Hal ${state.sessionPage} / ${state.sessionTotalPages}`;
+          const next = document.createElement("button");
+          next.type = "button";
+          next.textContent = "Next";
+          next.disabled = state.sessionPage >= state.sessionTotalPages;
+          next.className = "rounded-full border border-slate-300 px-3 py-1 text-xs disabled:opacity-40";
+          next.addEventListener("click", () => {
+            state.sessionPage = Math.min(state.sessionTotalPages, state.sessionPage + 1);
+            loadDashboard().catch(() => {});
+          });
+          pager.appendChild(prev);
+          pager.appendChild(info);
+          pager.appendChild(next);
+        }
+      }
+
+      async function loadSessionReport(sessionId) {
+        const response = await fetch(`${SESSION_API}/${sessionId}`);
+        if (!response.ok) throw new Error("Gagal memuat rekap sesi.");
+        const report = await response.json();
+        state.selectedSessionId = report.id;
+        renderSessionHistory(state.sessions);
+        renderSessionSummary(report);
+      }
+
+      async function loadDashboard(preferredSessionId) {
+        const safeJson = async (url, fallback) => {
+          try {
+            const response = await fetch(url);
+            if (!response.ok) return fallback;
+            return await response.json();
+          } catch {
+            return fallback;
+          }
+        };
+
+        const sessionParams = new URLSearchParams({
+          page: String(state.sessionPage),
+          limit: String(state.sessionLimit),
+          q: state.sessionHistoryQuery || "",
+          host: state.sessionHostQuery || "",
+          date: state.sessionDateQuery || "",
+          sort: state.sessionSort,
+          order: state.sessionOrder,
+        });
+        const [activeData, listeners, sessionsData, posters] = await Promise.all([
+          safeJson(SESSION_API + "/active", { active: null }),
+          safeJson(API + "/api/listeners", { count: 0, updatedAt: null }),
+          safeJson(`${SESSION_API}?${sessionParams.toString()}`, {
+            items: [],
+            page: 1,
+            total_pages: 1,
+            total_items: 0,
+          }),
+          safeJson(API + "/api/posters", []),
+        ]);
+        state.sessions = Array.isArray(sessionsData?.items) ? sessionsData.items : [];
+        state.sessionPage = Number(sessionsData?.page || state.sessionPage || 1);
+        state.sessionTotalPages = Number(sessionsData?.total_pages || 1);
+        state.sessionTotalItems = Number(sessionsData?.total_items || 0);
+        renderListenerCard(listeners);
+        renderActiveSession(activeData?.active || null);
+        syncReadyPoster(Array.isArray(posters) ? posters : []);
+        renderPosterUploadStatus();
+        renderSessionHistory(state.sessions);
+
+        const sessionToLoad =
+          preferredSessionId ||
+          state.selectedSessionId ||
+          (state.sessions[0] ? state.sessions[0].id : null);
+
+        if (sessionToLoad) {
+          await loadSessionReport(sessionToLoad);
+        } else {
+          state.selectedSessionId = null;
+          renderSessionSummary(null);
+        }
+      }
+
+      async function uploadPoster() {
+        const selectedFile = await new Promise((resolve) => {
+          const picker = document.createElement("input");
+          picker.type = "file";
+          picker.accept = "image/*";
+          picker.addEventListener("change", () => {
+            resolve(picker.files?.[0] || null);
+          });
+          picker.click();
+        });
+        if (!selectedFile) return;
+
         const formData = new FormData();
-        formData.append("title", document.getElementById("title").value);
         formData.append("image", selectedFile);
 
         const res = await fetch(API + "/api/posters", {
@@ -254,11 +1044,157 @@
           return;
         }
 
-        alert("Upload berhasil!");
-        loadData();
+        const data = await res.json();
+        state.readyPoster = data?.poster || null;
+        state.latestPoster = data?.poster || null;
+        renderPosterUploadStatus();
+        alert("Poster terbaru berhasil diupload dan siap dipakai.");
       }
 
-      loadData();
+      document
+        .getElementById("sessionHistorySearch")
+        .addEventListener("input", (event) => {
+          state.sessionHistoryQuery = event.target.value || "";
+          state.sessionPage = 1;
+          loadDashboard().catch(() => {});
+        });
+      document
+        .getElementById("sessionHostFilter")
+        .addEventListener("input", (event) => {
+          state.sessionHostQuery = event.target.value || "";
+          state.sessionPage = 1;
+          loadDashboard().catch(() => {});
+        });
+      document
+        .getElementById("sessionDateFilter")
+        .addEventListener("change", (event) => {
+          state.sessionDateQuery = event.target.value || "";
+          state.sessionPage = 1;
+          loadDashboard().catch(() => {});
+        });
+      document.querySelectorAll(".report-tab").forEach((button) => {
+        button.addEventListener("click", () => {
+          const tabName = button.getAttribute("data-report-tab");
+          if (tabName) setActiveReportTab(tabName);
+        });
+      });
+
+      document
+        .getElementById("sessionForm")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const hostName = document.getElementById("hostName").value.trim();
+          const programTitle =
+            document.getElementById("programTitle").value.trim() || "Siaran";
+          const topic = document.getElementById("topic").value.trim();
+
+          if (!state.readyPoster?.id) {
+            setSessionStatus(
+              "Upload poster terbaru terlebih dahulu sebelum memulai siaran.",
+              "error"
+            );
+            renderPosterUploadStatus();
+            return;
+          }
+
+          try {
+            const response = await fetch(SESSION_API + "/start", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                host_name: hostName,
+                program_title: programTitle,
+                topic,
+                poster_id: state.readyPoster.id,
+              }),
+            });
+
+            const data = await response.json();
+            if (!response.ok) {
+              throw new Error(toFriendlyAdminError(data?.error));
+            }
+
+            setSessionStatus("Sesi siaran berhasil dimulai.", "success");
+            await loadDashboard();
+          } catch (error) {
+            setSessionStatus(error.message || "Gagal memulai sesi siaran.", "error");
+          }
+        });
+
+      document
+        .getElementById("stopSessionButton")
+        .addEventListener("click", async () => {
+          try {
+            const response = await fetch(SESSION_API + "/stop", {
+              method: "POST",
+            });
+            const data = await response.json();
+            if (!response.ok) {
+              throw new Error(toFriendlyAdminError(data?.error));
+            }
+
+            document.getElementById("sessionForm").reset();
+            setSessionStatus(
+              "Sesi siaran selesai. Rekap terakhir sudah ditampilkan di dashboard.",
+              "success"
+            );
+            renderSessionSummary(data?.session || null);
+            await loadDashboard(data?.session?.id);
+          } catch (error) {
+            setSessionStatus(error.message || "Gagal menghentikan sesi siaran.", "error");
+          }
+        });
+
+      loadDashboard().catch(() => {
+        setSessionStatus("Sebagian data dashboard gagal dimuat.", "error");
+      });
+
+      function setActiveNavLink(sectionId) {
+        document.querySelectorAll("[data-nav-link]").forEach((link) => {
+          const isActive = link.getAttribute("data-target") === sectionId;
+          link.className =
+            "rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition " +
+            (isActive
+              ? "border-cyan-500 bg-cyan-600 text-white shadow-sm shadow-cyan-200"
+              : "border-slate-200 bg-slate-50 text-slate-700 hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-700");
+        });
+      }
+
+      function setActivePanel(sectionId) {
+        document.querySelectorAll(".dashboard-panel").forEach((panel) => {
+          panel.classList.toggle("active", panel.id === sectionId);
+        });
+        setActiveNavLink(sectionId);
+      }
+
+      document.querySelectorAll("[data-nav-link]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const targetId = button.getAttribute("data-target");
+          if (targetId) setActivePanel(targetId);
+        });
+      });
+
+      document.getElementById("logoutButton").addEventListener("click", async () => {
+        try {
+          await fetch("/admin/logout", { method: "POST" });
+        } finally {
+          window.location.href = "/admin/login";
+        }
+      });
+
+      setActiveNavLink("overviewSection");
+
+      let isSyncingDashboard = false;
+      window.setInterval(async () => {
+        if (isSyncingDashboard) return;
+        isSyncingDashboard = true;
+        try {
+          await loadDashboard();
+        } finally {
+          isSyncingDashboard = false;
+        }
+      }, 2000);
     </script>
   </body>
 </html>

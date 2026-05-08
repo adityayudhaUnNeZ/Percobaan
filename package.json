@@ -1,0 +1,39 @@
+{
+  "name": "percobaan",
+  "version": "1.0.0",
+  "description": "Minkes Radio web (Express + Tailwind)",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "build:css": "tailwindcss -c tailwind.config.js -i frontend/src/output.source.css -o frontend/assets/styles/styles.css",
+    "watch:css": "tailwindcss -c tailwind.config.js -i frontend/src/output.source.css -o frontend/assets/styles/styles.css --watch",
+    "dev": "concurrently -k \"npm:watch:css\" \"nodemon backend/server.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adityayudhaUnNeZ/Percobaan.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/adityayudhaUnNeZ/Percobaan/issues"
+  },
+  "homepage": "https://github.com/adityayudhaUnNeZ/Percobaan#readme",
+  "dependencies": {
+    "axios": "^1.14.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^4.22.1",
+    "multer": "^2.1.1",
+    "mysql2": "^3.22.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.0.1",
+    "nodemon": "^3.1.14",
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.10"
+  }
+}

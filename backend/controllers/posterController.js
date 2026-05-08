@@ -7,11 +7,9 @@ exports.uploadPoster = async (req, res) => {
     }
 
     const image_url = `/uploads/${req.file.filename}`;
-    const { title } = req.body;
+    const poster = await createPoster({ image_url });
 
-    await createPoster({ title, image_url });
-
-    res.json({ message: "Poster uploaded!" });
+    res.json({ message: "Poster uploaded!", poster });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

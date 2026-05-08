@@ -1,4 +1,5 @@
 const { createRequest, getRequests } = require("../models/requestModel");
+const { getActiveSession } = require("../models/broadcastSessionModel");
 
 function normalizeText(value) {
   return typeof value === "string" ? value.trim() : "";
@@ -28,7 +29,14 @@ exports.addRequest = async (req, res) => {
       });
     }
 
-    await createRequest({ name, song_title, artist, message });
+    const activeSession = await getActiveSession();
+    await createRequest({
+      name,
+      song_title,
+      artist,
+      message,
+      session_id: activeSession?.id || null,
+    });
     res.json({ message: "Request lagu masuk!" });
   } catch (err) {
     res.status(500).json({ error: err.message });
