@@ -31,7 +31,7 @@ app.use("/api/broadcast-sessions", require("./routes/broadcastSessionRoutes"));
 app.use(express.static(path.join(__dirname, "../frontend")));
 
 const ICECAST_STATS_URL =
-  process.env.ICECAST_STATS_URL || "http://172.17.10.103:8000/status-json.xsl";
+  process.env.ICECAST_STATS_URL || "http://172.17.10.33:8000/status-json.xsl";
 const ICECAST_MOUNT = process.env.ICECAST_MOUNT || "/radio";
 const ICECAST_USER = process.env.ICECAST_USER || "";
 const ICECAST_PASSWORD = process.env.ICECAST_PASSWORD || "";

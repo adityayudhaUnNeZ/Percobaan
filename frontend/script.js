@@ -2,7 +2,7 @@
   const API =
     window.location.origin && window.location.origin.startsWith("http")
       ? window.location.origin
-      : "http://172.17.10.103:8000";
+      : "http://172.17.10.33:8000";
   const $ = (id) => document.getElementById(id);
 
   const audio = $("audio");
@@ -37,7 +37,7 @@
     scheduleText: "Rabu, 4 Februari 2026 10.00-11.00 WIB",
     listenersText: "",
     topicText: "Topics: UHC",
-    streamUrl: "http://172.17.10.103:8000/radio",
+    streamUrl: "http://172.17.10.33:8000/radio",
     links: {
       youtube: "https://www.youtube.com/@dinkessemarangkota",
       instagram: "https://www.instagram.com/dkksemarang/",
@@ -295,9 +295,11 @@
   function formatUpdatedTime(iso) {
     if (!iso) return "Terakhir update --.-- WIB";
     const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return "Terakhir update --.-- WIB";
     const time = date.toLocaleTimeString("id-ID", {
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: "Asia/Jakarta",
     });
     return `Terakhir update ${time} WIB`;
   }
@@ -317,7 +319,8 @@
         updateListenerUi(data.count, data.updatedAt);
       }
     } catch {
-      //fallback: show zero when API fails\n      updateListenerUi(0, null);
+      // fallback: show zero when API fails
+      updateListenerUi(0, null);
     }
   }
 
